@@ -1,0 +1,2 @@
+# Local-only config holding the API key — never commit this
+config.js
