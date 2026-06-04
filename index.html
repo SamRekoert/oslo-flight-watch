@@ -293,11 +293,11 @@
 /* ───────────────────────────── CONFIG / STATE ───────────────────────────── */
 const DEFAULTS = {
   name: "Joel",
-  flight: "KL1205",
-  // Real KL1205 times (Amsterdam → Oslo, 2026-06-04): scheduled 16:50, landed ~19:39.
+  flight: "KL1207",
+  // Real KL1207 times (Amsterdam → Oslo, 2026-06-04): scheduled dep 20:50, ETA Oslo 22:54.
   // Baked in so the dashboard is accurate WITHOUT needing the API key.
-  dep: "2026-06-04T16:50",   // scheduled departure (local)
-  arr: "2026-06-04T19:39",   // actual arrival (local)
+  dep: "2026-06-04T20:50",   // scheduled departure (local)
+  arr: "2026-06-04T22:54",   // estimated arrival (local)
   key: ""
 };
 const AIRPORTS = {
@@ -527,15 +527,20 @@ function updateHero() {
 function tick() {
   const now = Date.now();
 
-  // Delay counter (freezes once he's safely on Norwegian soil)
+  // Delay counter — handles before takeoff, in transit, and after landing
   const arrived = now >= tl.arrival;
-  const delayMs = (arrived ? tl.arrival : now) - tl.scheduled;
   if (arrived) {
     $("delayNum").textContent = "🇳🇴 HE MADE IT";
     $("delayNum").className = "stat-num good";
-    $("delayLabel").textContent = "total saga: " + fmtDur(delayMs) + " of not-being-in-Norway";
+    $("delayLabel").textContent = "total saga: " + fmtDur(tl.arrival - tl.scheduled) + " of not-being-in-Norway";
+  } else if (now < tl.scheduled) {
+    $("delayNum").textContent = fmtDur(tl.scheduled - now);
+    $("delayNum").className = "stat-num warn";
+    $("delayLabel").textContent = "until his (alleged) scheduled departure";
   } else {
-    $("delayNum").textContent = fmtDur(delayMs);
+    $("delayNum").textContent = fmtDur(now - tl.scheduled);
+    $("delayNum").className = "stat-num warn";
+    $("delayLabel").textContent = "since scheduled departure, still not in Norway";
   }
 
   // ETA countdown
