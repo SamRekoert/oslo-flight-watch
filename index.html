@@ -11,18 +11,10 @@
 
 <style>
   :root {
-    --bg: #0a0e1a;
-    --panel: #121a2e;
-    --panel-2: #18233d;
-    --line: #243556;
-    --txt: #e8eefc;
-    --muted: #8ea0c4;
-    --accent: #FDBA0B;      /* Lithuanian yellow */
-    --green: #009543;       /* Lithuanian green */
-    --red:   #C1272D;       /* Lithuanian red */
-    --good: #51cf66;
-    --warn: #ffd43b;
-    --bad: #ff6b6b;
+    --bg: #0a0e1a; --panel: #121a2e; --panel-2: #18233d; --line: #243556;
+    --txt: #e8eefc; --muted: #8ea0c4;
+    --accent: #FDBA0B; --green: #009543; --red: #C1272D;
+    --good: #51cf66; --warn: #ffd43b; --bad: #ff6b6b;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -35,32 +27,27 @@
 
   header {
     display: flex; align-items: center; justify-content: space-between;
-    gap: 14px; flex-wrap: wrap;
-    border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 22px;
+    gap: 14px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 22px;
   }
   .brand { display: flex; align-items: center; gap: 14px; }
   .brand .logo {
     width: 46px; height: 46px; border-radius: 12px; flex: none;
     background: linear-gradient(180deg, var(--accent) 0 33%, var(--green) 33% 66%, var(--red) 66%);
-    display: grid; place-items: center; font-size: 22px;
-    box-shadow: 0 6px 20px rgba(253,186,11,.3);
+    display: grid; place-items: center; font-size: 22px; box-shadow: 0 6px 20px rgba(253,186,11,.3);
   }
   .brand h1 { font-size: 18px; margin: 0; letter-spacing: .3px; }
   .brand .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
   .live-pill {
     display: inline-flex; align-items: center; gap: 7px;
-    background: rgba(253,186,11,.12); color: var(--accent);
-    border: 1px solid rgba(253,186,11,.35);
-    padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
-    letter-spacing: .5px; text-transform: uppercase;
+    background: rgba(253,186,11,.12); color: var(--accent); border: 1px solid rgba(253,186,11,.35);
+    padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
   }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.4s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity: .35; transform: scale(.7);} }
 
   .hero {
     background: linear-gradient(135deg, var(--panel-2), var(--panel));
-    border: 1px solid var(--line); border-radius: 18px; padding: 26px 24px;
-    margin-bottom: 18px; position: relative; overflow: hidden;
+    border: 1px solid var(--line); border-radius: 18px; padding: 26px 24px; margin-bottom: 18px; position: relative; overflow: hidden;
   }
   .hero::after { content: "🏖️"; position: absolute; right: 6px; top: -10px; font-size: 120px; opacity: .06; }
   .hero .eyebrow { color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: 1.5px; }
@@ -71,10 +58,8 @@
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; grid-column: span 12; }
   .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 12px; }
   @media (min-width: 720px) {
-    .col-3 { grid-column: span 3; }
-    .col-4 { grid-column: span 4; }
-    .col-6 { grid-column: span 6; }
-    .col-8 { grid-column: span 8; }
+    .col-3 { grid-column: span 3; } .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; } .col-8 { grid-column: span 8; }
   }
 
   .stat-num { font-size: clamp(26px, 5vw, 40px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
@@ -84,8 +69,7 @@
 
   .route { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
   .route .ap { text-align: center; }
-  .route .code { font-size: 24px; font-weight: 800; }
-  .route .city { color: var(--muted); font-size: 12px; }
+  .route .code { font-size: 24px; font-weight: 800; } .route .city { color: var(--muted); font-size: 12px; }
   .route .path { flex: 1; height: 2px; background: var(--line); position: relative; border-radius: 2px; }
   #map { height: 320px; border-radius: 12px; overflow: hidden; filter: saturate(.95) brightness(.95); }
 
@@ -102,8 +86,7 @@
   .feed .sev { flex: none; }
 
   #fact { font-size: 15.5px; line-height: 1.5; min-height: 66px; }
-  .flag-strip { height: 8px; border-radius: 6px; margin-top: 14px;
-    background: linear-gradient(180deg, var(--accent) 0 33%, var(--green) 33% 66%, var(--red) 66%); }
+  .flag-strip { height: 8px; border-radius: 6px; margin-top: 14px; background: linear-gradient(180deg, var(--accent) 0 33%, var(--green) 33% 66%, var(--red) 66%); }
 
   .ooo { font-family: 'Consolas', monospace; font-size: 13px; line-height: 1.6; background: var(--panel-2);
     border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px; color: #cdd8f2; }
@@ -127,6 +110,10 @@
   .dlg-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
   footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 30px; }
   a { color: var(--accent); }
+
+  .confetti { position: fixed; top: -40px; font-size: 22px; pointer-events: none; z-index: 9999;
+    animation-name: fall; animation-timing-function: linear; animation-fill-mode: forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 </style>
 </head>
 <body>
@@ -137,7 +124,7 @@
       <div class="logo">🛫</div>
       <div>
         <h1 id="title">JOËL'S GREAT ESCAPE — VACATION OPS</h1>
-        <div class="sub">Mission: smuggle one (1) executive to Vilnius 🇱🇹 · Objective: maximum relaxation, minimum email</div>
+        <div class="sub">Mission: getting one (1) overqualified storingsopvolger to Vilnius 🇱🇹 · Objective: maximum relaxation, minimum storingen</div>
       </div>
     </div>
     <div style="display:flex; gap:10px; align-items:center;">
@@ -154,28 +141,24 @@
 
   <div class="grid">
 
-    <!-- Big countdown -->
     <div class="card col-4">
       <h2 id="cd1Head">⏳ T-minus to Joël's escape</h2>
       <div class="stat-num accent" id="cd1Num">—</div>
       <div class="stat-label" id="cd1Label">until wheels-up from Amsterdam</div>
     </div>
 
-    <!-- ETA -->
     <div class="card col-4">
       <h2>🛬 Arrival in Vilnius</h2>
       <div class="stat-num good" id="cd2Num">—</div>
       <div class="stat-label" id="cd2Label">estimated touchdown countdown</div>
     </div>
 
-    <!-- Jealousy -->
     <div class="card col-4">
       <h2>😤 Team jealousy level</h2>
       <div class="stat-num" id="jealNum">—</div>
       <div class="stat-label" id="jealLabel">among those left at the office</div>
     </div>
 
-    <!-- Route + map -->
     <div class="card col-8">
       <h2>🗺 Escape route</h2>
       <div class="route">
@@ -186,7 +169,6 @@
       <div id="map"></div>
     </div>
 
-    <!-- Weather smugness -->
     <div class="card col-4">
       <h2>🌤 Weather smugness index</h2>
       <div class="wx-row">
@@ -196,33 +178,50 @@
       <div class="verdict" id="wxVerdict">comparing his fortune to ours…</div>
     </div>
 
-    <!-- Status feed -->
     <div class="card col-8">
       <h2>📡 Escape status feed</h2>
       <ul class="feed" id="feed"></ul>
     </div>
 
-    <!-- Lithuania fact -->
+    <!-- OFFICE CATASTROPHE -->
+    <div class="card col-4">
+      <h2>🏢 Office status (without Joël)</h2>
+      <div class="stat-num" id="officeStatus" style="font-size:clamp(17px,3.2vw,24px);line-height:1.25">—</div>
+      <div class="stat-label" id="officeStoringen">storingen today: —</div>
+      <div class="stat-label" id="officeActing" style="margin-top:8px;color:var(--accent)"></div>
+    </div>
+
+    <div class="card col-8">
+      <h2>📟 Live storingen catastrophe feed</h2>
+      <ul class="feed" id="ofeed"></ul>
+    </div>
+
     <div class="card col-4">
       <h2>🇱🇹 Why he chose Lithuania</h2>
       <div id="fact">…</div>
       <div class="flag-strip"></div>
     </div>
 
-    <!-- Out of office -->
     <div class="card col-6">
       <h2>📧 Auto-reply now armed</h2>
       <div class="ooo" id="ooo"></div>
     </div>
 
-    <!-- Return to reality -->
     <div class="card col-6">
       <h2>💼 Return to reality</h2>
       <div class="stat-num warn" id="retNum">—</div>
       <div class="stat-label" id="retLabel">until the inbox reunion</div>
     </div>
 
-    <!-- Bingo -->
+    <div class="card col-12">
+      <h2>🕐 Two time zones, one lucky man</h2>
+      <div class="wx-row" style="max-width:520px;margin:0 auto">
+        <div class="wx"><div class="temp" id="clkVno" style="font-size:30px">--:--</div><div class="place">Vilnius 🇱🇹</div></div>
+        <div class="wx"><div class="temp" id="clkAms" style="font-size:30px">--:--</div><div class="place">The office 🇳🇱</div></div>
+      </div>
+      <div class="verdict" id="clkNote">Vilnius runs 1 hour ahead — he's literally in the future, and he's not coming back to warn us.</div>
+    </div>
+
     <div class="card col-12">
       <h2>🎯 Vilnius vacation bingo <span style="font-weight:400;text-transform:none;color:var(--muted)">(tap when it happens)</span></h2>
       <div class="bingo" id="bingo"></div>
@@ -239,28 +238,16 @@
 <dialog id="setupDlg">
   <h3>⚙ Mission setup</h3>
   <div class="hint">Everything saves in this browser only. The times are pre-loaded from real flight data.</div>
-
-  <label>Traveller's name</label>
-  <input id="inName" placeholder="Joël" />
-
-  <label>Flight number</label>
-  <input id="inFlight" placeholder="BT960" />
-
-  <label>Scheduled departure (local)</label>
-  <input id="inDep" type="datetime-local" />
-
-  <label>Scheduled arrival (local)</label>
-  <input id="inArr" type="datetime-local" />
-
-  <label>Return-to-work date — optional</label>
-  <input id="inRet" type="date" />
-
+  <label>Traveller's name</label><input id="inName" placeholder="Joël" />
+  <label>Flight number</label><input id="inFlight" placeholder="BT960" />
+  <label>Scheduled departure (local)</label><input id="inDep" type="datetime-local" />
+  <label>Scheduled arrival (local)</label><input id="inArr" type="datetime-local" />
+  <label>Return-to-work date — optional</label><input id="inRet" type="date" />
   <div class="keybox">
     <label style="margin-top:0;">🔴 Live updates — paste AeroDataBox API key (optional)</label>
     <input id="inKey" placeholder="paste key here for real-time position & status" />
     <div class="hint">With a key, the dashboard polls real flight status/position every minute while he's airborne. Leave blank to run on the baked schedule (still accurate). Free key: <a href="https://rapidapi.com/aedbx-aedbx/api/aerodatabox" target="_blank" rel="noopener">rapidapi.com → AeroDataBox</a>.</div>
   </div>
-
   <div class="dlg-actions">
     <button class="btn ghost" id="cancelBtn">Cancel</button>
     <button class="btn" id="saveBtn">Save & relaunch</button>
@@ -273,11 +260,9 @@
 const DEFAULTS = {
   name: "Joël",
   flight: "BT960",
-  // Real BT960 times (airBaltic, Amsterdam → Vilnius, Fri 2026-07-24), with explicit
-  // UTC offsets so the countdown is correct in any timezone. Baked in => no key needed.
   dep: "2026-07-24T16:35:00+02:00",   // Amsterdam departure (CEST)
   arr: "2026-07-24T19:50:00+03:00",   // Vilnius arrival (EEST)
-  ret: "",                             // optional return-to-work date (YYYY-MM-DD)
+  ret: "",
   key: ""
 };
 const AIRPORTS = {
@@ -300,18 +285,17 @@ function buildTimeline() {
   return { departure: dep, arrival: arr, flightDur: Math.max(1, arr - dep) };
 }
 let tl = buildTimeline();
-let liveActive = false;   // becomes true if a real GPS position arrives
+let liveActive = false;
+let celebrated = false;
 
 /* ───────────────────────────── HELPERS ───────────────────────────── */
 const $ = id => document.getElementById(id);
+const p2 = n => String(n).padStart(2, "0");
 function fmtBig(ms) {
   const neg = ms < 0; ms = Math.abs(ms);
-  const d = Math.floor(ms / 86400000);
-  const h = Math.floor(ms % 86400000 / 3600000);
-  const m = Math.floor(ms % 3600000 / 60000);
-  const s = Math.floor(ms % 60000 / 1000);
-  const p = n => String(n).padStart(2, "0");
-  return (neg ? "−" : "") + (d > 0 ? `${d}d ${p(h)}:${p(m)}:${p(s)}` : `${p(h)}:${p(m)}:${p(s)}`);
+  const d = Math.floor(ms / 86400000), h = Math.floor(ms % 86400000 / 3600000),
+        m = Math.floor(ms % 3600000 / 60000), s = Math.floor(ms % 60000 / 1000);
+  return (neg ? "−" : "") + (d > 0 ? `${d}d ${p2(h)}:${p2(m)}:${p2(s)}` : `${p2(h)}:${p2(m)}:${p2(s)}`);
 }
 
 /* ───────────────────────────── MAP ───────────────────────────── */
@@ -326,24 +310,21 @@ function initMap() {
   progressLine = L.polyline([[f.lat, f.lon]], { color: "#009543", weight: 3 }).addTo(map);
   planeMarker = L.marker([f.lat, f.lon], { icon: L.divIcon({ html: "✈️", className: "", iconSize: [24, 24] }) }).addTo(map);
 }
-function setPlaneProgress(p) {
-  p = Math.max(0, Math.min(1, p));
+function setPlaneProgress(pr) {
+  pr = Math.max(0, Math.min(1, pr));
   const f = AIRPORTS.from, t = AIRPORTS.to;
-  const lat = f.lat + (t.lat - f.lat) * p, lon = f.lon + (t.lon - f.lon) * p;
+  const lat = f.lat + (t.lat - f.lat) * pr, lon = f.lon + (t.lon - f.lon) * pr;
   planeMarker.setLatLng([lat, lon]);
   progressLine.setLatLngs([[f.lat, f.lon], [lat, lon]]);
-  $("routePath").style.background = `linear-gradient(90deg, #009543 ${p*100}%, var(--line) ${p*100}%)`;
+  $("routePath").style.background = `linear-gradient(90deg, #009543 ${pr*100}%, var(--line) ${pr*100}%)`;
 }
 function setPlaneReal(lat, lon) { planeMarker.setLatLng([lat, lon]); progressLine.setLatLngs([[AIRPORTS.from.lat, AIRPORTS.from.lon], [lat, lon]]); }
 
-/* ───────────────────────────── WEATHER (Open-Meteo, no key) ───────────────────────────── */
-const WX_CODES = {
-  0:["☀️"],1:["🌤"],2:["⛅"],3:["☁️"],45:["🌫"],48:["🌫"],51:["🌦"],53:["🌦"],55:["🌧"],
-  61:["🌧"],63:["🌧"],65:["🌧"],71:["🌨"],73:["🌨"],75:["❄️"],80:["🌦"],81:["🌧"],82:["⛈"],95:["⛈"],96:["⛈"],99:["⛈"]
-};
-async function fetchWx(p) {
-  const u = `https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,weather_code&timezone=auto`;
-  const r = await fetch(u); const d = await r.json(); return d.current;
+/* ───────────────────────────── WEATHER ───────────────────────────── */
+const WX_CODES = {0:["☀️"],1:["🌤"],2:["⛅"],3:["☁️"],45:["🌫"],48:["🌫"],51:["🌦"],53:["🌦"],55:["🌧"],61:["🌧"],63:["🌧"],65:["🌧"],71:["🌨"],73:["🌨"],75:["❄️"],80:["🌦"],81:["🌧"],82:["⛈"],95:["⛈"],96:["⛈"],99:["⛈"]};
+async function fetchWx(pt) {
+  const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pt.lat}&longitude=${pt.lon}&current=temperature_2m,weather_code&timezone=auto`);
+  return (await r.json()).current;
 }
 async function loadWeather() {
   try {
@@ -352,21 +333,19 @@ async function loadWeather() {
     $("wxVnoE").textContent = (WX_CODES[v.weather_code]||["🌍"])[0];
     $("wxAmsE").textContent = (WX_CODES[a.weather_code]||["🌍"])[0];
     $("wxVnoT").textContent = vt + "°"; $("wxAmsT").textContent = at + "°";
-    let verdict;
-    if (vt > at + 1) verdict = `Vilnius is ${vt-at}° warmer. Enjoy the office, everyone. 🫠`;
-    else if (at > vt + 1) verdict = `Ha! ${at-vt}° warmer here. Small victories for the desk-bound.`;
-    else verdict = `Basically the same temperature. He's just there for the cepelinai.`;
-    $("wxVerdict").textContent = verdict;
+    $("wxVerdict").textContent = vt > at + 1 ? `Vilnius is ${vt-at}° warmer. Enjoy the office, everyone. 🫠`
+      : at > vt + 1 ? `Ha! ${at-vt}° warmer here. Small victories for the desk-bound.`
+      : `Basically the same temperature. He's just there for the cepelinai.`;
   } catch (e) { $("wxVerdict").textContent = "Weather satellites are also on holiday."; }
 }
 
-/* ───────────────────────── LIVE FLIGHT (optional, needs key) ───────────────────────── */
+/* ───────────────────────── LIVE FLIGHT (optional) ───────────────────────── */
 async function loadRealFlight() {
   if (!cfg.key || !cfg.flight) return;
   try {
     const date = (cfg.dep || new Date().toISOString()).slice(0, 10);
-    const u = `https://aerodatabox.p.rapidapi.com/flights/number/${encodeURIComponent(cfg.flight)}/${date}?withLocation=true`;
-    const r = await fetch(u, { headers: { "X-RapidAPI-Key": cfg.key, "X-RapidAPI-Host": "aerodatabox.p.rapidapi.com" } });
+    const r = await fetch(`https://aerodatabox.p.rapidapi.com/flights/number/${encodeURIComponent(cfg.flight)}/${date}?withLocation=true`,
+      { headers: { "X-RapidAPI-Key": cfg.key, "X-RapidAPI-Host": "aerodatabox.p.rapidapi.com" } });
     if (!r.ok) throw new Error("HTTP " + r.status);
     const arr = await r.json(); const f = Array.isArray(arr) ? arr[0] : arr;
     if (!f) return;
@@ -378,12 +357,20 @@ async function loadRealFlight() {
     if (f.location && f.location.lat != null) { liveActive = true; setPlaneReal(f.location.lat, f.location.lon); }
     $("dataSource").textContent = `🔴 LIVE via AeroDataBox · ${cfg.flight} · status: ${f.status || "tracked"}` + (liveActive ? " · real GPS position" : " · position not exposed, animating on schedule");
     $("livePill").textContent = "Live";
-  } catch (e) {
-    $("dataSource").textContent = "Live fetch failed — running on baked schedule. (Check the key in ⚙ Setup.)";
-  }
+  } catch (e) { $("dataSource").textContent = "Live fetch failed — running on baked schedule. (Check the key in ⚙ Setup.)"; }
 }
 
-/* ───────────────────────────── STATUS FEED ───────────────────────────── */
+/* ───────────────────────────── FEED HELPERS ───────────────────────────── */
+function feedLine(feedEl, sev, text) {
+  const li = document.createElement("li");
+  const t = new Date();
+  li.innerHTML = `<span class="t">${p2(t.getHours())}:${p2(t.getMinutes())}</span><span class="sev">${sev}</span>` +
+                 `<span>${text.replace(/Subject/g, cfg.name).replace(/Joël/g, cfg.name)}</span>`;
+  feedEl.insertBefore(li, feedEl.firstChild);
+  while (feedEl.children.length > 25) feedEl.removeChild(feedEl.lastChild);
+}
+
+/* ───────────────────────────── ESCAPE STATUS FEED ───────────────────────────── */
 const SARCASM = [
   ["🏝️","Out Of Office auto-reply armed. Coverage reassigned to: a houseplant and good intentions."],
   ["🧳","Subject is packing shorts for a country whose forecast politely says 'maybe'."],
@@ -399,18 +386,113 @@ const SARCASM = [
   ["📵","Do Not Disturb enabled. On the phone AND the conscience."],
   ["🍺","A Švyturys has been detected in Subject's immediate future."],
   ["🐝","Local mosquitoes have been formally notified of a fresh arrival."],
-  ["💶","Subject discovered Lithuania uses the euro. One (1) fewer excuse to overspend."]
+  ["💶","Subject discovered Lithuania uses the euro. One (1) fewer excuse to overspend."],
+  ["📴","Subject's on-call phone has been placed in airplane mode. So has Subject."],
+  ["🔋","Somewhere a battery is misbehaving. It is officially Not Subject's Problem™ for the week."],
+  ["🚫","Escalation attempt blocked: Subject is 1,400 km away and pretending not to see it."],
+  ["📊","A dashboard turned red back home. Subject's dashboard is a drinks menu."],
+  ["🧘","Subject has achieved the rare 'storingsopvolger at rest' state. Scientists are baffled."],
+  ["📟","PagerDuty tried. PagerDuty failed. Subject wins."],
+  ["⚡","Grid frequency wobbled. Subject did not. He's on a terrace."],
+  ["🏖️","Subject located the nearest terrace within 4 minutes of landing. Efficiency intact."],
+  ["💍","Amber vendor spotted. Subject's wallet has entered a defensive stance."],
+  ["🗣️","Subject attempted 'Ačiū'. Locals appreciated the effort. Mostly."],
+  ["🏀","A basketball game is on. Subject now has 11 new best friends."],
+  ["😴","Cepelinai consumed. Subject requires a 2-hour horizontal recovery period."],
+  ["💗","The pink soup was, against all odds, delicious. Subject is a changed man."],
+  ["⏱️","Subject said he'd 'just check email quickly'. It has been 3 hours. He has not."],
+  ["🧢","Sunburn probability: rising. SPF located: no."],
+  ["🥂","Subject is doing the thing where he says 'this is the life' to no one in particular."],
+  ["📅","Meetings Subject is missing right now: several. Meetings he regrets missing: zero."],
+  ["🧲","Subject bought a fridge magnet. The vacation is now legally official."],
+  ["🦶","Old Town cobblestones claimed one (1) ankle. Subject walks it off heroically."],
+  ["👟","Subject's step count today already exceeds his entire last sprint."],
+  ["🪑","Back at the office, Subject's chair is being guarded by a single loyal cardigan."],
+  ["🌬️","Someone asked where Subject is. The room went quiet. A tumbleweed of jealousy rolled past."],
+  ["🍫","Duty-free Toblerone the size of a toddler: considered. Again."],
+  ["🛂","Passport control took one look at Subject's holiday grin and waved him through."],
+  ["🍽️","Subject is 'just trying a little of everything'. This is a lie of beautiful proportions."]
 ];
-let feedIdx = 0;
-function addFeed(sev, text) {
-  const li = document.createElement("li");
-  const t = new Date();
-  li.innerHTML = `<span class="t">${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}</span>` +
-                 `<span class="sev">${sev}</span><span>${text.replace(/Subject/g, cfg.name)}</span>`;
-  const feed = $("feed"); feed.insertBefore(li, feed.firstChild);
-  while (feed.children.length > 25) feed.removeChild(feed.lastChild);
+let sIdx = 0;
+function pushSarcasm() { const [s, t] = SARCASM[sIdx % SARCASM.length]; sIdx++; feedLine($("feed"), s, t); }
+
+/* ───────────────────────────── OFFICE CATASTROPHE ───────────────────────────── */
+const OFFICE_STAGES = [
+  ["🟢","STABLE — Joël still within reach"],
+  ["🟡","ELEVATED — someone noticed he's gone"],
+  ["🟠","STRAINED — the on-call phone rings into the void"],
+  ["🔴","CRITICAL — storingen multiplying unsupervised"],
+  ["🚨","SEVERE — improvised heroics underway"],
+  ["☢️","CATASTROPHIC — country mildly falling apart"]
+];
+function officeLevel(now) {
+  if (now < tl.departure) return 0;
+  return Math.min(5, 1 + Math.floor((now - tl.departure) / 3600000 / 6));
 }
-function pushSarcasm() { const [s, t] = SARCASM[feedIdx % SARCASM.length]; feedIdx++; addFeed(s, t); }
+function storingenCount(now) {
+  if (now < tl.departure) return 3;
+  return Math.floor(3 * Math.exp(0.12 * (now - tl.departure) / 3600000));
+}
+const HANDOVER = [
+  "a Magic 8-Ball set to 'try again later'", "an out-of-office reply and a prayer",
+  "ChatGPT (also on a break)", "Kevin, intern, day 2", "the on-call phone, face-down in a drawer",
+  "nobody. It's fine. Everything is fine.", "a suspiciously confident houseplant",
+  "future-Joël (deferred to Monday)", "the coffee machine (promoted this morning)",
+  "a coin flip: heads ignore, tails ignore", "the battery, steering itself out of spite",
+  "'the system', which has never failed us (except now)"
+];
+let hIdx = 0;
+function rotateHandover() { $("officeActing").textContent = "Acting storingsopvolger: " + HANDOVER[hIdx % HANDOVER.length].replace(/Joël/g, cfg.name); hIdx++; }
+function updateOffice(now) {
+  const lvl = officeLevel(now); const stage = OFFICE_STAGES[lvl];
+  $("officeStatus").textContent = `${stage[0]} ${stage[1]}`.replace(/Joël/g, cfg.name);
+  $("officeStatus").className = "stat-num " + (lvl >= 4 ? "bad" : lvl >= 3 ? "warn" : lvl >= 1 ? "accent" : "good");
+  const n = storingenCount(now);
+  $("officeStoringen").textContent = "storingen today: " + (n > 99999 ? "∞ (we stopped counting)" : n.toLocaleString());
+}
+const OFFICE_PRE = [
+  "The office senses a disturbance. Joël has printed a boarding pass.",
+  "Colleagues eye Joël's desk nervously. Who will follow the storingen now?",
+  "Contingency meeting held re: Joël's absence. Outcome: collective denial.",
+  "Someone volunteered to cover on-call, then remembered a prior commitment. Immediately.",
+  "The storingen are suspiciously quiet. They know. They are waiting.",
+  "HR confirms Joël is, in fact, allowed to take holiday. The team is appealing the decision."
+];
+const OFFICE_ESCALATION = [
+  "Storingen today: slightly up. Probably a coincidence. Probably.",
+  "The on-call phone rang. Nobody with Joël's competence answered.",
+  "First storing 'resolved' by turning it off and on again. Morale: cautiously okay.",
+  "A colleague muttered 'Joël would've caught that.' The room nodded solemnly.",
+  "The amount of storingen has DOUBLED. Management assumes it's seasonal.",
+  "The amount of storingen has TRIPLED in Joël's absence.",
+  "Storingen are now rising exponentially. A whiteboard was deployed. It did not help.",
+  "Escalation matrix consulted. The matrix simply reads 'call Joël'. We cannot.",
+  "A battery somewhere is freelancing. It has not filed the paperwork.",
+  "The imbalance market is now imbalanced about the imbalance. Meta-storing detected.",
+  "Grid frequency is doing interpretive dance. Nobody is qualified to make it stop.",
+  "Storingen have reached triple digits. Coffee reserves reached zero. Correlation suspected.",
+  "An intern has been promoted to Head of Storingen. He started 40 minutes ago.",
+  "The dashboard is entirely red. Someone suggested we 'just make it green'. They were removed.",
+  "We tried ChatGPT. ChatGPT told us to contact a qualified storingsopvolger. Ha.",
+  "Storingen are now reproducing. We did not know they could do that.",
+  "Storingen have reached an UNPRECEDENTED number. The country is quietly falling apart in Joël's absence.",
+  "The lights flickered nationwide, spelling 'W-H-E-R-E-I-S-J-O-E-L' in Morse.",
+  "Historians have begun referring to this period as 'The Great Storing'.",
+  "The power grid has requested asylum. The request is being processed by no one.",
+  "Storingen have achieved sentience and unionised. Their one demand: Joël's return.",
+  "Scientists confirm societal collapse is now directly proportional to Joël's tan.",
+  "The last functioning transformer left a note. It simply said 'good luck'.",
+  "Storingen count: ∞. We have stopped counting. We have started praying.",
+  "Neighbouring countries have offered thoughts, prayers, and one (1) spare fuse.",
+  "Joël remains blissfully unaware, sipping something cold. As he should. We'll manage. (We won't.)"
+];
+let preIdx = 0, escIdx = 0;
+function pushOfeed() {
+  const now = Date.now();
+  if (now < tl.departure) { feedLine($("ofeed"), "🏢", OFFICE_PRE[preIdx % OFFICE_PRE.length]); preIdx++; return; }
+  const i = escIdx < OFFICE_ESCALATION.length ? escIdx : (OFFICE_ESCALATION.length - 4 + (escIdx % 4));
+  feedLine($("ofeed"), "📟", OFFICE_ESCALATION[i]); escIdx++;
+}
 
 /* ───────────────────────────── LITHUANIA FACTS ───────────────────────────── */
 const FACTS = [
@@ -421,20 +503,35 @@ const FACTS = [
   "Šaltibarščiai — cold beetroot soup — is a shocking neon pink and genuinely delicious. Don't fight it.",
   "Vilnius Old Town is one of the largest surviving medieval old towns in Northern Europe (UNESCO-listed).",
   "Lithuania was the first Soviet republic to declare independence, back in 1990.",
-  "Vilnius once ran a tourism slogan roughly meaning 'nobody knows where it is — but when you find it, amazing.'",
+  "The Grand Duchy of Lithuania was once the largest state in Europe, stretching from the Baltic to the Black Sea.",
+  "The geographic centre of Europe was calculated to sit just north of Vilnius. Joël is holidaying at the middle of the continent.",
+  "In 1989 two million people joined hands across Lithuania, Latvia and Estonia — the 675 km 'Baltic Way'.",
   "Amber ('Baltic gold') washes up on the coast. Joël will absolutely be offered some jewelry.",
-  "Lithuania has some of the fastest public WiFi on earth — so his 'out of office' has zero technical excuse."
+  "Lithuania has some of the fastest public WiFi on earth — so his 'out of office' has zero technical excuse.",
+  "The Hill of Crosses near Šiauliai holds well over 100,000 crosses left by pilgrims.",
+  "Trakai's island castle sits on a lake and comes with kibinai — warm stuffed pastries worth the trip alone.",
+  "The white stork is Lithuania's national bird, and the country has one of the densest stork populations in Europe.",
+  "Lithuania once created an official scent for Vilnius — the city literally has a signature perfume.",
+  "Forests cover roughly a third of the country; mushroom- and berry-picking is a serious national pastime.",
+  "Legend says Vilnius was founded after Grand Duke Gediminas dreamt of an iron wolf howling on a hill.",
+  "Žalgiris Kaunas is a basketball institution — winning the 1999 EuroLeague is still national folklore.",
+  "'Šakotis', a spiky tree-shaped cake baked on a rotating spit, is the boss of every Lithuanian celebration.",
+  "Lithuania joined the euro in 2015, so Joël can overspend in a currency he already recognises.",
+  "Vilnius summers are warmer than you'd expect — July highs comfortably hit the mid-20s °C.",
+  "Gediminas' Tower still watches over the city; the climb is repaid with the best Old Town view.",
+  "Užgavėnės, the pre-Lent festival, involves masks, pancakes and burning a straw effigy of winter. Lithuania parties properly."
 ];
-let factIdx = 0;
+let fIdx = 0;
 function rotateFact() {
   $("fact").style.opacity = 0;
-  setTimeout(() => { $("fact").textContent = FACTS[factIdx % FACTS.length].replace(/Joël/g, cfg.name); factIdx++;
+  setTimeout(() => { $("fact").textContent = FACTS[fIdx % FACTS.length].replace(/Joël/g, cfg.name); fIdx++;
     $("fact").style.transition = "opacity .4s"; $("fact").style.opacity = 1; }, 250);
 }
 
 /* ───────────────────────────── BINGO ───────────────────────────── */
 const BINGO = ["Cepelinai eaten","Neon-pink soup","Basketball on every TV","Old Town selfie","Amber jewelry bought",
-  "Užupis angel spotted","Mosquito bite","Sauna + cold plunge","Said 'Labas!'","Švyturys beer","Got mildly lost","Cobblestone ankle roll"];
+  "Užupis angel spotted","Mosquito bite","Sauna + cold plunge","Said 'Labas!'","Švyturys beer","Got mildly lost","Cobblestone ankle roll",
+  "Kibinai at Trakai","Gediminas Tower climb","Ignored a work call"];
 function buildBingo() {
   const done = JSON.parse(localStorage.getItem("joelBingoVno") || "{}");
   const el = $("bingo"); el.innerHTML = "";
@@ -455,77 +552,80 @@ function renderOOO() {
     `For anything urgent, please ask yourself whether it is <i>truly</i> urgent. It is not.<br><br>Warm regards (warmer than your office),<br><b>${cfg.name}</b></div>`;
 }
 
+/* ───────────────────────────── CELEBRATION ───────────────────────────── */
+function celebrate() {
+  const em = ["🎉","🇱🇹","🍺","🥟","✨","🎊"];
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement("span");
+    s.className = "confetti"; s.textContent = em[Math.floor(Math.random() * em.length)];
+    s.style.left = (Math.random() * 100) + "vw";
+    s.style.animationDuration = (2 + Math.random() * 3) + "s";
+    s.style.animationDelay = (Math.random() * 0.9) + "s";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 6500);
+  }
+}
+
 /* ───────────────────────────── TICK ───────────────────────────── */
 function jealousy(now) {
   if (now >= tl.departure) return 100;
-  const scale = 48 * 3600000;
-  const frac = Math.max(0, Math.min(1, 1 - (tl.departure - now) / scale));
-  return Math.round(55 + frac * 43);
+  return Math.round(55 + Math.max(0, Math.min(1, 1 - (tl.departure - now) / (48 * 3600000))) * 43);
 }
 function updateHero(now) {
   let eyebrow, status, sub;
   if (now < tl.departure) {
     const h = (tl.departure - now) / 3600000;
     eyebrow = "Countdown to liftoff";
-    if (h > 3) { status = `${cfg.name} is still at his desk. For now. 🙄`;
-      sub = "Physically present at work. Spiritually already in seat 14C with a neck pillow."; }
-    else { status = `${cfg.name} has entered Airport Mode. 🛫`;
-      sub = "Emotionally checked out. Legally still an employee for a few more minutes."; }
+    if (h > 3) { status = `${cfg.name} is still at his desk. For now. 🙄`; sub = "Physically present at work. Spiritually already in seat 14C with a neck pillow."; }
+    else { status = `${cfg.name} has entered Airport Mode. 🛫`; sub = "Emotionally checked out. Legally still a storingsopvolger for a few more minutes."; }
   } else if (now < tl.arrival) {
-    eyebrow = "Escape in progress";
-    status = `${cfg.name} is AIRBORNE — escape successful! 🛫`;
-    sub = "Cruising toward Vilnius while the rest of us cruise toward another meeting.";
+    eyebrow = "Escape in progress"; status = `${cfg.name} is AIRBORNE — escape successful! 🛫`;
+    sub = "Cruising toward Vilnius while the storingen back home cruise toward chaos.";
   } else {
-    eyebrow = "Mission accomplished";
-    status = `${cfg.name} has landed in Vilnius. 🇱🇹`;
-    sub = "He's on holiday. We are not. Please close this tab and get back to work.";
+    eyebrow = "Mission accomplished"; status = `${cfg.name} has landed in Vilnius. 🇱🇹`;
+    sub = "He's on holiday. We are not. Please close this tab and go handle a storing.";
   }
   $("heroEyebrow").textContent = eyebrow; $("heroStatus").textContent = status; $("heroSub").textContent = sub;
 }
 function tick() {
   const now = Date.now();
 
-  // Countdown card 1: to departure (pre), else time airborne / landed
   if (now < tl.departure) {
-    $("cd1Head").textContent = "⏳ T-minus to Joël's escape".replace("Joël", cfg.name);
-    $("cd1Num").textContent = fmtBig(tl.departure - now);
-    $("cd1Label").textContent = "until wheels-up from Amsterdam";
+    $("cd1Head").textContent = "⏳ T-minus to " + cfg.name + "'s escape";
+    $("cd1Num").textContent = fmtBig(tl.departure - now); $("cd1Label").textContent = "until wheels-up from Amsterdam";
   } else if (now < tl.arrival) {
     $("cd1Head").textContent = "🛫 Time airborne";
-    $("cd1Num").textContent = fmtBig(now - tl.departure);
-    $("cd1Label").textContent = "of blissful unreachability";
+    $("cd1Num").textContent = fmtBig(now - tl.departure); $("cd1Label").textContent = "of blissful unreachability";
   } else {
     $("cd1Head").textContent = "🏖️ On holiday for";
-    $("cd1Num").textContent = fmtBig(now - tl.arrival);
-    $("cd1Label").textContent = "and counting (lucky him)";
+    $("cd1Num").textContent = fmtBig(now - tl.arrival); $("cd1Label").textContent = "and counting (lucky him)";
   }
 
-  // Card 2: arrival countdown
   const toArr = tl.arrival - now;
   if (toArr > 0) { $("cd2Num").textContent = fmtBig(toArr); $("cd2Label").textContent = "estimated touchdown in Vilnius"; }
   else { $("cd2Num").textContent = "ARRIVED"; $("cd2Label").textContent = "welcome to Lithuania 🇱🇹"; }
 
-  // Jealousy
   const j = jealousy(now);
-  $("jealNum").textContent = j + "%";
-  $("jealNum").className = "stat-num " + (j >= 100 ? "bad" : j > 80 ? "warn" : "accent");
+  $("jealNum").textContent = j + "%"; $("jealNum").className = "stat-num " + (j >= 100 ? "bad" : j > 80 ? "warn" : "accent");
   $("jealLabel").textContent = j >= 100 ? "MAXED OUT — he's actually gone" : "among those left at the office";
 
-  // Plane
   if (!liveActive) setPlaneProgress((now - tl.departure) / tl.flightDur);
 
-  // Return to reality
   if (cfg.ret) {
-    const back = new Date(cfg.ret + "T09:00:00").getTime();
-    const toBack = back - now;
+    const toBack = new Date(cfg.ret + "T09:00:00").getTime() - now;
     $("retNum").textContent = toBack > 0 ? fmtBig(toBack) : "TODAY 😱";
     $("retNum").className = "stat-num " + (toBack > 0 ? "warn" : "bad");
     $("retLabel").textContent = toBack > 0 ? "until he faces his inbox again" : "the inbox reunion is upon him";
   } else {
-    $("retNum").textContent = "∞";
-    $("retNum").className = "stat-num good";
+    $("retNum").textContent = "∞"; $("retNum").className = "stat-num good";
     $("retLabel").textContent = "return date unset — and honestly, good for him";
   }
+
+  updateOffice(now);
+  $("clkVno").textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/Vilnius', hour: '2-digit', minute: '2-digit' });
+  $("clkAms").textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/Amsterdam', hour: '2-digit', minute: '2-digit' });
+
+  if (now >= tl.arrival && !celebrated) { celebrated = true; celebrate(); }
 
   updateHero(now);
 }
@@ -533,7 +633,6 @@ function tick() {
 /* ───────────────────────────── SETUP ───────────────────────────── */
 function openSetup() {
   $("inName").value = cfg.name || ""; $("inFlight").value = cfg.flight || "";
-  // datetime-local wants "YYYY-MM-DDTHH:mm" — strip any offset for the picker
   $("inDep").value = (cfg.dep || "").slice(0, 16); $("inArr").value = (cfg.arr || "").slice(0, 16);
   $("inRet").value = cfg.ret || ""; $("inKey").value = cfg.key || "";
   $("setupDlg").showModal();
@@ -554,19 +653,19 @@ function applyLabels() {
   $("toCode").textContent = AIRPORTS.to.code; $("toCity").textContent = AIRPORTS.to.city;
 }
 async function boot() {
-  applyLabels(); initMap(); buildBingo(); renderOOO(); rotateFact(); loadWeather();
-  $("dataSource").textContent = cfg.key
-    ? "Attempting live connection…"
-    : "Running on baked schedule · add your API key in ⚙ Setup for live position updates.";
+  applyLabels(); initMap(); buildBingo(); renderOOO(); rotateFact(); rotateHandover(); loadWeather();
+  $("dataSource").textContent = cfg.key ? "Attempting live connection…" : "Running on baked schedule · add your API key in ⚙ Setup for live position updates.";
   await loadRealFlight();
-  addFeed("🚀", `${cfg.name}'s Great Escape Operations Center is online. Tracking flight ${cfg.flight || "?"} to Vilnius.`);
-  pushSarcasm();
+  feedLine($("feed"), "🚀", `${cfg.name}'s Great Escape Operations Center is online. Tracking flight ${cfg.flight || "?"} to Vilnius.`);
+  pushSarcasm(); pushOfeed();
   tick();
   setInterval(tick, 1000);
-  setInterval(pushSarcasm, 20000);
+  setInterval(pushSarcasm, 18000);
+  setInterval(pushOfeed, 13000);
   setInterval(rotateFact, 15000);
+  setInterval(rotateHandover, 9000);
   setInterval(loadWeather, 600000);
-  if (cfg.key) setInterval(loadRealFlight, 60000);  // live updates every minute
+  if (cfg.key) setInterval(loadRealFlight, 60000);
 }
 boot();
 </script>
