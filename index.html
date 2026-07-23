@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Joel Flight Operations Center — Destination Oslo</title>
-<meta name="description" content="Live mission control for Joel's heroic journey to Oslo." />
+<title>Joël's Great Escape — Vacation Operations Center</title>
+<meta name="description" content="Mission control for Joël's heroic escape to Vilnius, Lithuania." />
 
-<!-- Leaflet (free maps, no API key) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -18,25 +17,22 @@
     --line: #243556;
     --txt: #e8eefc;
     --muted: #8ea0c4;
-    --accent: #4dabf7;
+    --accent: #FDBA0B;      /* Lithuanian yellow */
+    --green: #009543;       /* Lithuanian green */
+    --red:   #C1272D;       /* Lithuanian red */
     --good: #51cf66;
     --warn: #ffd43b;
     --bad: #ff6b6b;
-    --norway: #ba0c2f;
-    --norway-blue: #00205b;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: radial-gradient(1200px 600px at 70% -10%, #16224a 0%, var(--bg) 55%);
-    color: var(--txt);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
+    background: radial-gradient(1200px 600px at 70% -10%, #1c2b16 0%, var(--bg) 55%);
+    color: var(--txt); min-height: 100vh; -webkit-font-smoothing: antialiased;
   }
   .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 18px 60px; }
 
-  /* Header */
   header {
     display: flex; align-items: center; justify-content: space-between;
     gap: 14px; flex-wrap: wrap;
@@ -45,119 +41,89 @@
   .brand { display: flex; align-items: center; gap: 14px; }
   .brand .logo {
     width: 46px; height: 46px; border-radius: 12px; flex: none;
-    background: linear-gradient(135deg, var(--norway-blue), var(--norway));
-    display: grid; place-items: center; font-size: 24px;
-    box-shadow: 0 6px 20px rgba(186,12,47,.35);
+    background: linear-gradient(180deg, var(--accent) 0 33%, var(--green) 33% 66%, var(--red) 66%);
+    display: grid; place-items: center; font-size: 22px;
+    box-shadow: 0 6px 20px rgba(253,186,11,.3);
   }
-  .brand h1 { font-size: 19px; margin: 0; letter-spacing: .3px; }
+  .brand h1 { font-size: 18px; margin: 0; letter-spacing: .3px; }
   .brand .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
   .live-pill {
     display: inline-flex; align-items: center; gap: 7px;
-    background: rgba(255,107,107,.12); color: var(--bad);
-    border: 1px solid rgba(255,107,107,.35);
+    background: rgba(253,186,11,.12); color: var(--accent);
+    border: 1px solid rgba(253,186,11,.35);
     padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
     letter-spacing: .5px; text-transform: uppercase;
   }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bad); animation: pulse 1.4s infinite; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.4s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity: .35; transform: scale(.7);} }
 
-  /* Hero status banner */
   .hero {
     background: linear-gradient(135deg, var(--panel-2), var(--panel));
     border: 1px solid var(--line); border-radius: 18px; padding: 26px 24px;
     margin-bottom: 18px; position: relative; overflow: hidden;
   }
-  .hero::after {
-    content: "✈"; position: absolute; right: -10px; top: -22px; font-size: 150px;
-    opacity: .05; transform: rotate(18deg);
-  }
+  .hero::after { content: "🏖️"; position: absolute; right: 6px; top: -10px; font-size: 120px; opacity: .06; }
   .hero .eyebrow { color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: 1.5px; }
-  .hero .status { font-size: clamp(26px, 5vw, 42px); font-weight: 800; margin: 8px 0 6px; line-height: 1.05; }
-  .hero .sub { color: var(--muted); font-size: 15px; max-width: 640px; }
+  .hero .status { font-size: clamp(24px, 4.6vw, 40px); font-weight: 800; margin: 8px 0 6px; line-height: 1.05; }
+  .hero .sub { color: var(--muted); font-size: 15px; max-width: 660px; }
 
-  /* Grid */
   .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-  .card {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
-    padding: 18px; grid-column: span 12;
-  }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; grid-column: span 12; }
   .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 12px; }
   @media (min-width: 720px) {
+    .col-3 { grid-column: span 3; }
     .col-4 { grid-column: span 4; }
     .col-6 { grid-column: span 6; }
     .col-8 { grid-column: span 8; }
   }
 
-  /* Big stat */
-  .stat-num { font-size: clamp(30px, 6vw, 44px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+  .stat-num { font-size: clamp(26px, 5vw, 40px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
   .stat-label { color: var(--muted); font-size: 13px; margin-top: 8px; }
-  .stat-num.bad { color: var(--bad); }
-  .stat-num.warn { color: var(--warn); }
-  .stat-num.good { color: var(--good); }
+  .stat-num.bad { color: var(--bad); } .stat-num.warn { color: var(--warn); } .stat-num.good { color: var(--good); }
+  .stat-num.accent { color: var(--accent); }
 
-  /* Route */
   .route { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
   .route .ap { text-align: center; }
-  .route .code { font-size: 26px; font-weight: 800; }
+  .route .code { font-size: 24px; font-weight: 800; }
   .route .city { color: var(--muted); font-size: 12px; }
-  .route .path { flex: 1; height: 2px; background: var(--line); position: relative; }
-  .route .path::before {
-    content: "✈"; position: absolute; top: -11px; font-size: 18px; color: var(--accent);
-    transition: left 1s linear;
-  }
+  .route .path { flex: 1; height: 2px; background: var(--line); position: relative; border-radius: 2px; }
+  #map { height: 320px; border-radius: 12px; overflow: hidden; filter: saturate(.95) brightness(.95); }
 
-  #map { height: 320px; border-radius: 12px; overflow: hidden; filter: saturate(.9) brightness(.95); }
+  .wx-row { display: flex; gap: 12px; }
+  .wx { flex: 1; background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align: center; }
+  .wx .emoji { font-size: 34px; } .wx .temp { font-size: 26px; font-weight: 800; }
+  .wx .place { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .verdict { margin-top: 12px; font-size: 13px; color: var(--accent); font-weight: 600; text-align: center; min-height: 18px; }
 
-  /* Weather */
-  .wx { display: flex; align-items: center; gap: 16px; }
-  .wx .emoji { font-size: 52px; }
-  .wx .temp { font-size: 38px; font-weight: 800; }
-  .wx .desc { color: var(--muted); font-size: 14px; }
-
-  /* Feed */
   .feed { list-style: none; margin: 0; padding: 0; max-height: 340px; overflow-y: auto; }
-  .feed li {
-    display: flex; gap: 12px; padding: 11px 4px; border-bottom: 1px dashed var(--line);
-    font-size: 14px; animation: slideIn .4s ease;
-  }
-  .feed li:first-child { animation: slideIn .5s ease; }
+  .feed li { display: flex; gap: 12px; padding: 11px 4px; border-bottom: 1px dashed var(--line); font-size: 14px; animation: slideIn .4s ease; }
   @keyframes slideIn { from { opacity: 0; transform: translateY(-6px);} to { opacity: 1; transform: none;} }
   .feed .t { color: var(--accent); font-variant-numeric: tabular-nums; flex: none; font-weight: 600; font-size: 13px; }
   .feed .sev { flex: none; }
 
-  /* Norway fact */
-  #fact { font-size: 16px; line-height: 1.5; min-height: 48px; }
-  .flag-strip { height: 6px; border-radius: 6px; margin-top: 14px;
-    background: linear-gradient(90deg, var(--norway) 0 33%, #fff 33% 40%, var(--norway-blue) 40% 60%, #fff 60% 67%, var(--norway) 67%); }
+  #fact { font-size: 15.5px; line-height: 1.5; min-height: 66px; }
+  .flag-strip { height: 8px; border-radius: 6px; margin-top: 14px;
+    background: linear-gradient(180deg, var(--accent) 0 33%, var(--green) 33% 66%, var(--red) 66%); }
 
-  /* Bingo */
+  .ooo { font-family: 'Consolas', monospace; font-size: 13px; line-height: 1.6; background: var(--panel-2);
+    border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px; color: #cdd8f2; }
+  .ooo .strike { text-decoration: line-through; opacity: .6; }
+
   .bingo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .bingo .cell {
-    border: 1px solid var(--line); border-radius: 10px; padding: 12px 10px; font-size: 12.5px;
-    text-align: center; cursor: pointer; user-select: none; background: var(--panel-2);
-    transition: .15s; min-height: 64px; display: grid; place-items: center;
-  }
+  .bingo .cell { border: 1px solid var(--line); border-radius: 10px; padding: 12px 10px; font-size: 12.5px;
+    text-align: center; cursor: pointer; user-select: none; background: var(--panel-2); transition: .15s; min-height: 62px; display: grid; place-items: center; }
   .bingo .cell:hover { border-color: var(--accent); }
-  .bingo .cell.done { background: rgba(81,207,102,.16); border-color: var(--good); text-decoration: line-through; color: var(--good); }
+  .bingo .cell.done { background: rgba(0,149,67,.18); border-color: var(--green); text-decoration: line-through; color: var(--good); }
 
-  /* Settings */
-  .btn {
-    background: var(--accent); color: #05121f; border: none; font-weight: 700;
-    padding: 9px 16px; border-radius: 10px; cursor: pointer; font-size: 13px;
-  }
+  .btn { background: var(--accent); color: #1a1400; border: none; font-weight: 700; padding: 9px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; }
   .btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--line); }
-  dialog {
-    border: 1px solid var(--line); border-radius: 16px; background: var(--panel);
-    color: var(--txt); max-width: 440px; width: 92%; padding: 24px;
-  }
+  dialog { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); color: var(--txt); max-width: 440px; width: 92%; padding: 24px; }
   dialog::backdrop { background: rgba(4,8,18,.7); backdrop-filter: blur(3px); }
   dialog h3 { margin: 0 0 4px; }
   dialog label { display: block; font-size: 12.5px; color: var(--muted); margin: 14px 0 5px; }
-  dialog input {
-    width: 100%; padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line);
-    background: var(--bg); color: var(--txt); font-size: 14px;
-  }
+  dialog input { width: 100%; padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); color: var(--txt); font-size: 14px; }
   .hint { font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .keybox { background: rgba(253,186,11,.08); border: 1px dashed rgba(253,186,11,.4); border-radius: 8px; padding: 10px 12px; margin-top: 16px; }
   .dlg-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
   footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 30px; }
   a { color: var(--accent); }
@@ -170,116 +136,130 @@
     <div class="brand">
       <div class="logo">🛫</div>
       <div>
-        <h1 id="title">JOEL — FLIGHT OPERATIONS CENTER</h1>
-        <div class="sub">Mission: deliver one (1) executive to Oslo 🇳🇴 · Status: in progress (allegedly)</div>
+        <h1 id="title">JOËL'S GREAT ESCAPE — VACATION OPS</h1>
+        <div class="sub">Mission: smuggle one (1) executive to Vilnius 🇱🇹 · Objective: maximum relaxation, minimum email</div>
       </div>
     </div>
     <div style="display:flex; gap:10px; align-items:center;">
-      <span class="live-pill"><span class="dot"></span> Live</span>
+      <span class="live-pill"><span class="dot"></span> <span id="livePill">Tracking</span></span>
       <button class="btn ghost" id="setupBtn">⚙ Setup</button>
     </div>
   </header>
 
   <section class="hero">
-    <div class="eyebrow">Current operational status</div>
-    <div class="status" id="heroStatus">Initialising mission control…</div>
-    <div class="sub" id="heroSub">Acquiring satellite lock on the departure lounge.</div>
+    <div class="eyebrow" id="heroEyebrow">Countdown to liftoff</div>
+    <div class="status" id="heroStatus">Initialising escape sequence…</div>
+    <div class="sub" id="heroSub">Calibrating jealousy sensors.</div>
   </section>
 
   <div class="grid">
 
-    <!-- Delay -->
+    <!-- Big countdown -->
     <div class="card col-4">
-      <h2>⏱ Total time not-in-Norway</h2>
-      <div class="stat-num warn" id="delayNum">—</div>
-      <div class="stat-label" id="delayLabel">since scheduled departure</div>
+      <h2 id="cd1Head">⏳ T-minus to Joël's escape</h2>
+      <div class="stat-num accent" id="cd1Num">—</div>
+      <div class="stat-label" id="cd1Label">until wheels-up from Amsterdam</div>
     </div>
 
-    <!-- Countdown -->
+    <!-- ETA -->
     <div class="card col-4">
-      <h2>🛬 ETA to Norwegian soil</h2>
-      <div class="stat-num good" id="etaNum">—</div>
-      <div class="stat-label" id="etaLabel">estimated arrival countdown</div>
+      <h2>🛬 Arrival in Vilnius</h2>
+      <div class="stat-num good" id="cd2Num">—</div>
+      <div class="stat-label" id="cd2Label">estimated touchdown countdown</div>
     </div>
 
-    <!-- Patience -->
+    <!-- Jealousy -->
     <div class="card col-4">
-      <h2>🧘 Patience reserves</h2>
-      <div class="stat-num" id="patienceNum">—</div>
-      <div class="stat-label">remaining (auto-depleting)</div>
+      <h2>😤 Team jealousy level</h2>
+      <div class="stat-num" id="jealNum">—</div>
+      <div class="stat-label" id="jealLabel">among those left at the office</div>
     </div>
 
     <!-- Route + map -->
     <div class="card col-8">
-      <h2>🗺 Live position</h2>
+      <h2>🗺 Escape route</h2>
       <div class="route">
         <div class="ap"><div class="code" id="fromCode">AMS</div><div class="city" id="fromCity">Amsterdam</div></div>
         <div class="path" id="routePath"></div>
-        <div class="ap"><div class="code" id="toCode">OSL</div><div class="city" id="toCity">Oslo</div></div>
+        <div class="ap"><div class="code" id="toCode">VNO</div><div class="city" id="toCity">Vilnius</div></div>
       </div>
       <div id="map"></div>
     </div>
 
-    <!-- Weather -->
+    <!-- Weather smugness -->
     <div class="card col-4">
-      <h2>🌦 Live weather in Oslo</h2>
-      <div class="wx">
-        <div class="emoji" id="wxEmoji">⛅</div>
-        <div>
-          <div class="temp" id="wxTemp">—°</div>
-          <div class="desc" id="wxDesc">contacting Norwegian skies…</div>
-        </div>
+      <h2>🌤 Weather smugness index</h2>
+      <div class="wx-row">
+        <div class="wx"><div class="emoji" id="wxVnoE">⛅</div><div class="temp" id="wxVnoT">—°</div><div class="place">Vilnius</div></div>
+        <div class="wx"><div class="emoji" id="wxAmsE">☁️</div><div class="temp" id="wxAmsT">—°</div><div class="place">The office</div></div>
       </div>
-      <div class="stat-label" id="wxExtra" style="margin-top:14px;"></div>
+      <div class="verdict" id="wxVerdict">comparing his fortune to ours…</div>
     </div>
 
     <!-- Status feed -->
     <div class="card col-8">
-      <h2>📡 Mission status feed</h2>
+      <h2>📡 Escape status feed</h2>
       <ul class="feed" id="feed"></ul>
     </div>
 
-    <!-- Norway fact -->
+    <!-- Lithuania fact -->
     <div class="card col-4">
-      <h2>🇳🇴 Reason it's worth the wait</h2>
+      <h2>🇱🇹 Why he chose Lithuania</h2>
       <div id="fact">…</div>
       <div class="flag-strip"></div>
     </div>
 
+    <!-- Out of office -->
+    <div class="card col-6">
+      <h2>📧 Auto-reply now armed</h2>
+      <div class="ooo" id="ooo"></div>
+    </div>
+
+    <!-- Return to reality -->
+    <div class="card col-6">
+      <h2>💼 Return to reality</h2>
+      <div class="stat-num warn" id="retNum">—</div>
+      <div class="stat-label" id="retLabel">until the inbox reunion</div>
+    </div>
+
     <!-- Bingo -->
-    <div class="card col-8">
-      <h2>🎯 Departure lounge bingo <span style="font-weight:400;text-transform:none;color:var(--muted)">(tap when spotted)</span></h2>
+    <div class="card col-12">
+      <h2>🎯 Vilnius vacation bingo <span style="font-weight:400;text-transform:none;color:var(--muted)">(tap when it happens)</span></h2>
       <div class="bingo" id="bingo"></div>
     </div>
 
   </div>
 
   <footer>
-    Joel Flight Operations Center · refreshed automatically · built with ❤️ and mild schadenfreude<br/>
+    Joël's Great Escape · Vacation Operations Center · refreshed automatically<br/>
     <span id="dataSource"></span>
   </footer>
 </div>
 
-<!-- Setup dialog -->
 <dialog id="setupDlg">
   <h3>⚙ Mission setup</h3>
-  <div class="hint">Everything saves in this browser only. Leave blank to use the comedy simulation.</div>
+  <div class="hint">Everything saves in this browser only. The times are pre-loaded from real flight data.</div>
 
   <label>Traveller's name</label>
-  <input id="inName" placeholder="Joel" />
+  <input id="inName" placeholder="Joël" />
 
-  <label>Flight number (e.g. KL1143)</label>
-  <input id="inFlight" placeholder="KL1143" />
+  <label>Flight number</label>
+  <input id="inFlight" placeholder="BT960" />
 
-  <label>Scheduled departure (your local time)</label>
+  <label>Scheduled departure (local)</label>
   <input id="inDep" type="datetime-local" />
 
-  <label>Estimated (delayed) arrival — optional</label>
+  <label>Scheduled arrival (local)</label>
   <input id="inArr" type="datetime-local" />
 
-  <label>AeroDataBox API key — optional (for REAL live tracking)</label>
-  <input id="inKey" placeholder="paste RapidAPI key for live data" />
-  <div class="hint">Free key at <a href="https://rapidapi.com/aedbx-aedbx/api/aerodatabox" target="_blank" rel="noopener">rapidapi.com → AeroDataBox</a>. Without it, the dashboard runs a (very flattering) simulation.</div>
+  <label>Return-to-work date — optional</label>
+  <input id="inRet" type="date" />
+
+  <div class="keybox">
+    <label style="margin-top:0;">🔴 Live updates — paste AeroDataBox API key (optional)</label>
+    <input id="inKey" placeholder="paste key here for real-time position & status" />
+    <div class="hint">With a key, the dashboard polls real flight status/position every minute while he's airborne. Leave blank to run on the baked schedule (still accurate). Free key: <a href="https://rapidapi.com/aedbx-aedbx/api/aerodatabox" target="_blank" rel="noopener">rapidapi.com → AeroDataBox</a>.</div>
+  </div>
 
   <div class="dlg-actions">
     <button class="btn ghost" id="cancelBtn">Cancel</button>
@@ -287,26 +267,26 @@
   </div>
 </dialog>
 
-<!-- Optional local-only overrides (git-ignored). Holds the API key + flight so it never enters the repo. -->
 <script src="config.js"></script>
 <script>
 /* ───────────────────────────── CONFIG / STATE ───────────────────────────── */
 const DEFAULTS = {
-  name: "Joel",
-  flight: "SK828",
-  // Real SK828 times (SAS, Amsterdam → Oslo, 2026-06-04): scheduled dep 19:10, ETA Oslo 21:01.
-  // Airborne / EnRoute. Baked in so the dashboard is accurate WITHOUT needing the API key.
-  dep: "2026-06-04T19:10",   // scheduled departure (local)
-  arr: "2026-06-04T21:01",   // estimated arrival (local)
+  name: "Joël",
+  flight: "BT960",
+  // Real BT960 times (airBaltic, Amsterdam → Vilnius, Fri 2026-07-24), with explicit
+  // UTC offsets so the countdown is correct in any timezone. Baked in => no key needed.
+  dep: "2026-07-24T16:35:00+02:00",   // Amsterdam departure (CEST)
+  arr: "2026-07-24T19:50:00+03:00",   // Vilnius arrival (EEST)
+  ret: "",                             // optional return-to-work date (YYYY-MM-DD)
   key: ""
 };
 const AIRPORTS = {
   from: { code: "AMS", city: "Amsterdam", lat: 52.3105, lon: 4.7683 },
-  to:   { code: "OSL", city: "Oslo",      lat: 60.1939, lon: 11.1004 }
+  to:   { code: "VNO", city: "Vilnius",   lat: 54.6341, lon: 25.2858 }
 };
+const WX = { vno: { lat: 54.69, lon: 25.28 }, ams: { lat: 52.37, lon: 4.90 } };
 
 function loadCfg() {
-  // Precedence: built-in defaults < baked-in config.js (local, git-ignored) < user's Setup edits.
   const baked = (typeof window !== "undefined" && window.JOEL_CONFIG) ? window.JOEL_CONFIG : {};
   try { return { ...DEFAULTS, ...baked, ...JSON.parse(localStorage.getItem("joelCfg") || "{}") }; }
   catch { return { ...DEFAULTS, ...baked }; }
@@ -314,133 +294,112 @@ function loadCfg() {
 function saveCfg(c) { localStorage.setItem("joelCfg", JSON.stringify(c)); }
 let cfg = loadCfg();
 
-/* Build the timeline. Real times if provided; otherwise a comedic default:
-   "scheduled" 90 min ago, "new estimate" 75 min from now. */
 function buildTimeline() {
-  const now = Date.now();
-  let scheduled = cfg.dep ? new Date(cfg.dep).getTime() : now - 90 * 60000;
-  let arrival   = cfg.arr ? new Date(cfg.arr).getTime() : now + 105 * 60000;
-  const flightDur = 105 * 60000; // AMS→OSL ~1h45
-  let departed = arrival - flightDur; // when wheels actually leave the ground
-  return { scheduled, arrival, departed, flightDur };
+  const dep = cfg.dep ? new Date(cfg.dep).getTime() : Date.now() + 3600000;
+  const arr = cfg.arr ? new Date(cfg.arr).getTime() : dep + 135 * 60000;
+  return { departure: dep, arrival: arr, flightDur: Math.max(1, arr - dep) };
 }
 let tl = buildTimeline();
+let liveActive = false;   // becomes true if a real GPS position arrives
 
 /* ───────────────────────────── HELPERS ───────────────────────────── */
 const $ = id => document.getElementById(id);
-function fmtDur(ms) {
+function fmtBig(ms) {
   const neg = ms < 0; ms = Math.abs(ms);
-  const h = Math.floor(ms / 3600000);
-  const m = Math.floor((ms % 3600000) / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  const pad = n => String(n).padStart(2, "0");
-  return (neg ? "−" : "") + (h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`);
+  const d = Math.floor(ms / 86400000);
+  const h = Math.floor(ms % 86400000 / 3600000);
+  const m = Math.floor(ms % 3600000 / 60000);
+  const s = Math.floor(ms % 60000 / 1000);
+  const p = n => String(n).padStart(2, "0");
+  return (neg ? "−" : "") + (d > 0 ? `${d}d ${p(h)}:${p(m)}:${p(s)}` : `${p(h)}:${p(m)}:${p(s)}`);
 }
 
 /* ───────────────────────────── MAP ───────────────────────────── */
 let map, planeMarker, progressLine;
 function initMap() {
-  map = L.map("map", { zoomControl: false, attributionControl: false })
-        .setView([56.2, 8.0], 5);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    maxZoom: 10
-  }).addTo(map);
-
+  map = L.map("map", { zoomControl: false, attributionControl: false }).setView([53.6, 15.0], 4);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { maxZoom: 10 }).addTo(map);
   const f = AIRPORTS.from, t = AIRPORTS.to;
-  L.circleMarker([f.lat, f.lon], { radius: 6, color: "#4dabf7", fillOpacity: 1 }).addTo(map).bindTooltip(f.code);
-  L.circleMarker([t.lat, t.lon], { radius: 6, color: "#ba0c2f", fillOpacity: 1 }).addTo(map).bindTooltip(t.code);
+  L.circleMarker([f.lat, f.lon], { radius: 6, color: "#FDBA0B", fillOpacity: 1 }).addTo(map).bindTooltip(f.code);
+  L.circleMarker([t.lat, t.lon], { radius: 6, color: "#C1272D", fillOpacity: 1 }).addTo(map).bindTooltip(t.code);
   L.polyline([[f.lat, f.lon], [t.lat, t.lon]], { color: "#243556", weight: 2, dashArray: "6 8" }).addTo(map);
-  progressLine = L.polyline([[f.lat, f.lon]], { color: "#51cf66", weight: 3 }).addTo(map);
-
-  const planeIcon = L.divIcon({ html: "✈️", className: "", iconSize: [24, 24] });
-  planeMarker = L.marker([f.lat, f.lon], { icon: planeIcon }).addTo(map);
+  progressLine = L.polyline([[f.lat, f.lon]], { color: "#009543", weight: 3 }).addTo(map);
+  planeMarker = L.marker([f.lat, f.lon], { icon: L.divIcon({ html: "✈️", className: "", iconSize: [24, 24] }) }).addTo(map);
 }
-function setPlaneProgress(p) { // p 0..1
+function setPlaneProgress(p) {
   p = Math.max(0, Math.min(1, p));
   const f = AIRPORTS.from, t = AIRPORTS.to;
-  const lat = f.lat + (t.lat - f.lat) * p;
-  const lon = f.lon + (t.lon - f.lon) * p;
+  const lat = f.lat + (t.lat - f.lat) * p, lon = f.lon + (t.lon - f.lon) * p;
   planeMarker.setLatLng([lat, lon]);
   progressLine.setLatLngs([[f.lat, f.lon], [lat, lon]]);
-  $("routePath").style.setProperty("--p", p);
-  const pathEl = $("routePath");
-  pathEl.style.position = "relative";
-  // move the ✈ on the route bar
-  const before = (p * 100);
-  pathEl.style.background = `linear-gradient(90deg, #51cf66 ${before}%, var(--line) ${before}%)`;
+  $("routePath").style.background = `linear-gradient(90deg, #009543 ${p*100}%, var(--line) ${p*100}%)`;
 }
+function setPlaneReal(lat, lon) { planeMarker.setLatLng([lat, lon]); progressLine.setLatLngs([[AIRPORTS.from.lat, AIRPORTS.from.lon], [lat, lon]]); }
 
 /* ───────────────────────────── WEATHER (Open-Meteo, no key) ───────────────────────────── */
 const WX_CODES = {
-  0:["☀️","Clear skies — Norway is showing off"],
-  1:["🌤","Mostly clear"],2:["⛅","Partly cloudy"],3:["☁️","Overcast"],
-  45:["🌫","Foggy"],48:["🌫","Freezing fog"],
-  51:["🌦","Light drizzle"],53:["🌦","Drizzle"],55:["🌧","Heavy drizzle"],
-  61:["🌧","Light rain"],63:["🌧","Rain"],65:["🌧","Heavy rain"],
-  71:["🌨","Light snow"],73:["🌨","Snow"],75:["❄️","Heavy snow — very Norwegian"],
-  77:["🌨","Snow grains"],80:["🌦","Rain showers"],81:["🌧","Rain showers"],82:["⛈","Violent showers"],
-  85:["🌨","Snow showers"],86:["❄️","Heavy snow showers"],
-  95:["⛈","Thunderstorm"],96:["⛈","Thunderstorm + hail"],99:["⛈","Severe thunderstorm"]
+  0:["☀️"],1:["🌤"],2:["⛅"],3:["☁️"],45:["🌫"],48:["🌫"],51:["🌦"],53:["🌦"],55:["🌧"],
+  61:["🌧"],63:["🌧"],65:["🌧"],71:["🌨"],73:["🌨"],75:["❄️"],80:["🌦"],81:["🌧"],82:["⛈"],95:["⛈"],96:["⛈"],99:["⛈"]
 };
+async function fetchWx(p) {
+  const u = `https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,weather_code&timezone=auto`;
+  const r = await fetch(u); const d = await r.json(); return d.current;
+}
 async function loadWeather() {
   try {
-    const u = `https://api.open-meteo.com/v1/forecast?latitude=59.91&longitude=10.75&current=temperature_2m,weather_code,wind_speed_10m&timezone=Europe%2FOslo`;
-    const r = await fetch(u); const d = await r.json();
-    const c = d.current;
-    const [emoji, desc] = WX_CODES[c.weather_code] || ["🌍", "Weather happening"];
-    $("wxEmoji").textContent = emoji;
-    $("wxTemp").textContent = Math.round(c.temperature_2m) + "°C";
-    $("wxDesc").textContent = desc;
-    $("wxExtra").textContent = `Wind ${Math.round(c.wind_speed_10m)} km/h · the fjords await.`;
-  } catch (e) {
-    $("wxDesc").textContent = "Oslo too cold for the API to respond.";
-  }
+    const [v, a] = await Promise.all([fetchWx(WX.vno), fetchWx(WX.ams)]);
+    const vt = Math.round(v.temperature_2m), at = Math.round(a.temperature_2m);
+    $("wxVnoE").textContent = (WX_CODES[v.weather_code]||["🌍"])[0];
+    $("wxAmsE").textContent = (WX_CODES[a.weather_code]||["🌍"])[0];
+    $("wxVnoT").textContent = vt + "°"; $("wxAmsT").textContent = at + "°";
+    let verdict;
+    if (vt > at + 1) verdict = `Vilnius is ${vt-at}° warmer. Enjoy the office, everyone. 🫠`;
+    else if (at > vt + 1) verdict = `Ha! ${at-vt}° warmer here. Small victories for the desk-bound.`;
+    else verdict = `Basically the same temperature. He's just there for the cepelinai.`;
+    $("wxVerdict").textContent = verdict;
+  } catch (e) { $("wxVerdict").textContent = "Weather satellites are also on holiday."; }
 }
 
-/* ───────────────────────── REAL FLIGHT DATA (optional) ───────────────────────── */
-let realData = null;
+/* ───────────────────────── LIVE FLIGHT (optional, needs key) ───────────────────────── */
 async function loadRealFlight() {
   if (!cfg.key || !cfg.flight) return;
   try {
-    const today = new Date().toISOString().slice(0, 10);
-    const u = `https://aerodatabox.p.rapidapi.com/flights/number/${encodeURIComponent(cfg.flight)}/${today}`;
-    const r = await fetch(u, { headers: {
-      "X-RapidAPI-Key": cfg.key,
-      "X-RapidAPI-Host": "aerodatabox.p.rapidapi.com"
-    }});
-    if (!r.ok) throw new Error("status " + r.status);
-    const arr = await r.json();
-    const fl = Array.isArray(arr) ? arr[0] : arr;
-    if (!fl) return;
-    realData = fl;
-    const dep = fl.departure?.scheduledTime?.utc || fl.departure?.revisedTime?.utc;
-    const arrT = fl.arrival?.revisedTime?.utc || fl.arrival?.predictedTime?.utc || fl.arrival?.scheduledTime?.utc;
-    if (dep) tl.scheduled = new Date(dep).getTime();
-    if (arrT) { tl.arrival = new Date(arrT).getTime(); tl.departed = tl.arrival - tl.flightDur; }
-    $("dataSource").textContent = `Live data: AeroDataBox · flight ${cfg.flight} · status: ${fl.status || "tracked"}`;
-    addFeed("🛰", `Real flight data acquired for ${cfg.flight}. Status: ${fl.status || "tracked"}.`);
+    const date = (cfg.dep || new Date().toISOString()).slice(0, 10);
+    const u = `https://aerodatabox.p.rapidapi.com/flights/number/${encodeURIComponent(cfg.flight)}/${date}?withLocation=true`;
+    const r = await fetch(u, { headers: { "X-RapidAPI-Key": cfg.key, "X-RapidAPI-Host": "aerodatabox.p.rapidapi.com" } });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const arr = await r.json(); const f = Array.isArray(arr) ? arr[0] : arr;
+    if (!f) return;
+    const dep = f.departure && (f.departure.revisedTime || f.departure.scheduledTime);
+    const arrT = f.arrival && (f.arrival.revisedTime || f.arrival.predictedTime || f.arrival.scheduledTime);
+    if (dep && dep.utc) cfg.dep = dep.utc.replace(" ", "T") + "Z";
+    if (arrT && arrT.utc) cfg.arr = arrT.utc.replace(" ", "T") + "Z";
+    tl = buildTimeline();
+    if (f.location && f.location.lat != null) { liveActive = true; setPlaneReal(f.location.lat, f.location.lon); }
+    $("dataSource").textContent = `🔴 LIVE via AeroDataBox · ${cfg.flight} · status: ${f.status || "tracked"}` + (liveActive ? " · real GPS position" : " · position not exposed, animating on schedule");
+    $("livePill").textContent = "Live";
   } catch (e) {
-    $("dataSource").textContent = "Live data unavailable — running comedy simulation.";
-    addFeed("⚠️", "Couldn't reach the flight API. Falling back to (optimistic) simulation.");
+    $("dataSource").textContent = "Live fetch failed — running on baked schedule. (Check the key in ⚙ Setup.)";
   }
 }
 
 /* ───────────────────────────── STATUS FEED ───────────────────────────── */
 const SARCASM = [
-  ["🛄","Subject located near Gate D. Posture: defeated. Coffee: overpriced."],
-  ["📢","Gate agent made an announcement. Nobody understood it. Subject sighed."],
-  ["☕","Subject has purchased a €6.50 airport coffee. Morale temporarily restored."],
-  ["🕐","Estimated departure pushed back again. Shocking absolutely no one."],
-  ["🧳","Subject has watched the same suitcase go around the carousel 4 times. It is not his."],
-  ["📱","Subject opened this very dashboard. Hi, boss. 👋 Norway misses you."],
-  ["🥪","A €11 sandwich was acquired. It was 'fine'."],
-  ["🛫","Another plane departed. It was not Joel's. Joel watched it leave."],
-  ["😤","Patience reserves dropped below 40%. Engaging deep-breathing protocol."],
-  ["🇳🇴","Reminder broadcast to subject: the fjords are not going anywhere. Unlike this flight."],
-  ["📶","Airport WiFi disconnected for the 3rd time. Subject considered a new career."],
-  ["🧘","Subject attempted meditation. Was interrupted by a boarding call for a different flight."],
-  ["🎧","Subject is now on podcast number three. The journey continues."],
-  ["🛒","Subject browsed duty-free Toblerone the size of a small child. Did not buy. Yet."]
+  ["🏝️","Out Of Office auto-reply armed. Coverage reassigned to: a houseplant and good intentions."],
+  ["🧳","Subject is packing shorts for a country whose forecast politely says 'maybe'."],
+  ["📉","Office morale is being quietly redistributed among those left behind."],
+  ["📧","Subject's inbox is filling up. Subject does not care. This is personal growth."],
+  ["🏀","Broadcast to Subject: in Lithuania, basketball isn't a sport, it's a personality trait."],
+  ["🥟","Subject is mentally preparing to eat his own body weight in cepelinai."],
+  ["🍲","Warning: Subject may encounter šaltibarščiai — a soup so pink it files its own taxes."],
+  ["😎","Subject's status is now 'unreachable' and, frankly, thriving."],
+  ["🛫","Subject keeps checking the gate screen like it personally owes him money."],
+  ["🧴","Sunscreen: acquired. Ambition: left at the office."],
+  ["🗺️","Subject has googled 'things to do in Vilnius' for the 6th time. Old Town still winning."],
+  ["📵","Do Not Disturb enabled. On the phone AND the conscience."],
+  ["🍺","A Švyturys has been detected in Subject's immediate future."],
+  ["🐝","Local mosquitoes have been formally notified of a fresh arrival."],
+  ["💶","Subject discovered Lithuania uses the euro. One (1) fewer excuse to overspend."]
 ];
 let feedIdx = 0;
 function addFeed(sev, text) {
@@ -448,173 +407,166 @@ function addFeed(sev, text) {
   const t = new Date();
   li.innerHTML = `<span class="t">${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}</span>` +
                  `<span class="sev">${sev}</span><span>${text.replace(/Subject/g, cfg.name)}</span>`;
-  const feed = $("feed");
-  feed.insertBefore(li, feed.firstChild);
+  const feed = $("feed"); feed.insertBefore(li, feed.firstChild);
   while (feed.children.length > 25) feed.removeChild(feed.lastChild);
 }
-function pushSarcasm() {
-  const [sev, txt] = SARCASM[feedIdx % SARCASM.length];
-  feedIdx++;
-  addFeed(sev, txt);
-}
+function pushSarcasm() { const [s, t] = SARCASM[feedIdx % SARCASM.length]; feedIdx++; addFeed(s, t); }
 
-/* ───────────────────────────── NORWAY FACTS ───────────────────────────── */
+/* ───────────────────────────── LITHUANIA FACTS ───────────────────────────── */
 const FACTS = [
-  "Norway has over 1,000 fjords. Joel will not visit all of them, but the option is there.",
-  "Oslo's airport (OSL) has heated floors. Warmer welcome than the departure lounge, frankly.",
-  "Norwegians invented the cheese slicer. A nation of problem-solvers — unlike this airline.",
-  "The sun barely sets in Norwegian summer. Plenty of daylight to make up for lost time.",
-  "Norway has a town called 'Hell'. Joel's commute today is merely a preview.",
-  "The Norwegian word 'koselig' means cosy contentment. The opposite of an airport gate.",
-  "Salmon, brown cheese, and waffles await. The departure lounge offers none of these.",
-  "Norway once knighted a penguin. Standards for heroism are clearly attainable, Joel.",
-  "Oslo is one of the world's fastest-growing capitals. It may have grown during this delay.",
-  "Norway has more reindeer than the entire population of Oslo. None of them are delayed."
+  "Lithuania treats basketball as a second religion — the national team outranks most politicians.",
+  "Vilnius has a self-declared breakaway state, the Republic of Užupis, with its own cheeky constitution (Article 1: everyone has the right to live by the River Vilnelė).",
+  "Lithuanian is one of the oldest living Indo-European languages — closer to Sanskrit than to its neighbours.",
+  "The national dish, cepelinai (zeppelin-shaped potato dumplings), is exactly as heavy as it sounds. Nap included.",
+  "Šaltibarščiai — cold beetroot soup — is a shocking neon pink and genuinely delicious. Don't fight it.",
+  "Vilnius Old Town is one of the largest surviving medieval old towns in Northern Europe (UNESCO-listed).",
+  "Lithuania was the first Soviet republic to declare independence, back in 1990.",
+  "Vilnius once ran a tourism slogan roughly meaning 'nobody knows where it is — but when you find it, amazing.'",
+  "Amber ('Baltic gold') washes up on the coast. Joël will absolutely be offered some jewelry.",
+  "Lithuania has some of the fastest public WiFi on earth — so his 'out of office' has zero technical excuse."
 ];
 let factIdx = 0;
 function rotateFact() {
   $("fact").style.opacity = 0;
-  setTimeout(() => {
-    $("fact").textContent = FACTS[factIdx % FACTS.length];
-    factIdx++;
-    $("fact").style.transition = "opacity .4s"; $("fact").style.opacity = 1;
-  }, 250);
+  setTimeout(() => { $("fact").textContent = FACTS[factIdx % FACTS.length].replace(/Joël/g, cfg.name); factIdx++;
+    $("fact").style.transition = "opacity .4s"; $("fact").style.opacity = 1; }, 250);
 }
 
 /* ───────────────────────────── BINGO ───────────────────────────── */
-const BINGO = [
-  "Crying baby","€9 coffee","Same announcement 4×","Sprinting passenger","Dead phone battery",
-  "Gate change","'Final call' (it's not)","Sleeping on luggage","Delayed AGAIN","Duty-free Toblerone",
-  "Broken WiFi","Suspicious sandwich"
-];
+const BINGO = ["Cepelinai eaten","Neon-pink soup","Basketball on every TV","Old Town selfie","Amber jewelry bought",
+  "Užupis angel spotted","Mosquito bite","Sauna + cold plunge","Said 'Labas!'","Švyturys beer","Got mildly lost","Cobblestone ankle roll"];
 function buildBingo() {
-  const done = JSON.parse(localStorage.getItem("joelBingo") || "{}");
+  const done = JSON.parse(localStorage.getItem("joelBingoVno") || "{}");
   const el = $("bingo"); el.innerHTML = "";
   BINGO.forEach((label, i) => {
     const c = document.createElement("div");
-    c.className = "cell" + (done[i] ? " done" : "");
-    c.textContent = label;
-    c.onclick = () => {
-      done[i] = !done[i];
-      localStorage.setItem("joelBingo", JSON.stringify(done));
-      c.classList.toggle("done");
-    };
+    c.className = "cell" + (done[i] ? " done" : ""); c.textContent = label;
+    c.onclick = () => { done[i] = !done[i]; localStorage.setItem("joelBingoVno", JSON.stringify(done)); c.classList.toggle("done"); };
     el.appendChild(c);
   });
 }
 
-/* ───────────────────────────── HERO STATUS ───────────────────────────── */
-function updateHero() {
-  const now = Date.now();
-  const delayMs = now - tl.scheduled;            // how long since "should have left"
-  const toArrival = tl.arrival - now;
-  let status, sub;
-  if (now < tl.departed) {
-    status = `${cfg.name} is STILL not in Norway.`;
-    sub = `Currently grounded. The aircraft and ${cfg.name} are in a committed long-distance relationship with Gate D.`;
-  } else if (now < tl.arrival) {
-    status = `${cfg.name} is AIRBORNE! 🎉`;
-    sub = `Against all odds, physics, and the schedule, ${cfg.name} is hurtling toward Oslo at this very moment.`;
-  } else {
-    status = `${cfg.name} has LANDED in Oslo. 🇳🇴`;
-    sub = `Mission accomplished. The fjords are now ${cfg.name}'s problem. Please close this dashboard and let him enjoy Norway.`;
-  }
-  $("heroStatus").textContent = status;
-  $("heroSub").textContent = sub;
+/* ───────────────────────────── OUT OF OFFICE ───────────────────────────── */
+function renderOOO() {
+  $("ooo").innerHTML =
+    `<div><b>Subject:</b> Out of Office 🏖️</div>` +
+    `<div style="margin-top:8px">Hi,<br>I'm currently in Vilnius, Lithuania, achieving a work-life balance you can only dream about.<br><br>` +
+    `I will reply to your email <span class="strike">immediately</span> <span class="strike">within 24 hours</span> when I feel like it.<br><br>` +
+    `For anything urgent, please ask yourself whether it is <i>truly</i> urgent. It is not.<br><br>Warm regards (warmer than your office),<br><b>${cfg.name}</b></div>`;
 }
 
-/* ───────────────────────────── MAIN TICK ───────────────────────────── */
+/* ───────────────────────────── TICK ───────────────────────────── */
+function jealousy(now) {
+  if (now >= tl.departure) return 100;
+  const scale = 48 * 3600000;
+  const frac = Math.max(0, Math.min(1, 1 - (tl.departure - now) / scale));
+  return Math.round(55 + frac * 43);
+}
+function updateHero(now) {
+  let eyebrow, status, sub;
+  if (now < tl.departure) {
+    const h = (tl.departure - now) / 3600000;
+    eyebrow = "Countdown to liftoff";
+    if (h > 3) { status = `${cfg.name} is still at his desk. For now. 🙄`;
+      sub = "Physically present at work. Spiritually already in seat 14C with a neck pillow."; }
+    else { status = `${cfg.name} has entered Airport Mode. 🛫`;
+      sub = "Emotionally checked out. Legally still an employee for a few more minutes."; }
+  } else if (now < tl.arrival) {
+    eyebrow = "Escape in progress";
+    status = `${cfg.name} is AIRBORNE — escape successful! 🛫`;
+    sub = "Cruising toward Vilnius while the rest of us cruise toward another meeting.";
+  } else {
+    eyebrow = "Mission accomplished";
+    status = `${cfg.name} has landed in Vilnius. 🇱🇹`;
+    sub = "He's on holiday. We are not. Please close this tab and get back to work.";
+  }
+  $("heroEyebrow").textContent = eyebrow; $("heroStatus").textContent = status; $("heroSub").textContent = sub;
+}
 function tick() {
   const now = Date.now();
 
-  // Delay counter — handles before takeoff, in transit, and after landing
-  const arrived = now >= tl.arrival;
-  if (arrived) {
-    $("delayNum").textContent = "🇳🇴 HE MADE IT";
-    $("delayNum").className = "stat-num good";
-    $("delayLabel").textContent = "total saga: " + fmtDur(tl.arrival - tl.scheduled) + " of not-being-in-Norway";
-  } else if (now < tl.scheduled) {
-    $("delayNum").textContent = fmtDur(tl.scheduled - now);
-    $("delayNum").className = "stat-num warn";
-    $("delayLabel").textContent = "until his (alleged) scheduled departure";
+  // Countdown card 1: to departure (pre), else time airborne / landed
+  if (now < tl.departure) {
+    $("cd1Head").textContent = "⏳ T-minus to Joël's escape".replace("Joël", cfg.name);
+    $("cd1Num").textContent = fmtBig(tl.departure - now);
+    $("cd1Label").textContent = "until wheels-up from Amsterdam";
+  } else if (now < tl.arrival) {
+    $("cd1Head").textContent = "🛫 Time airborne";
+    $("cd1Num").textContent = fmtBig(now - tl.departure);
+    $("cd1Label").textContent = "of blissful unreachability";
   } else {
-    $("delayNum").textContent = fmtDur(now - tl.scheduled);
-    $("delayNum").className = "stat-num warn";
-    $("delayLabel").textContent = "since scheduled departure, still not in Norway";
+    $("cd1Head").textContent = "🏖️ On holiday for";
+    $("cd1Num").textContent = fmtBig(now - tl.arrival);
+    $("cd1Label").textContent = "and counting (lucky him)";
   }
 
-  // ETA countdown
-  const toArrival = tl.arrival - now;
-  if (toArrival > 0) {
-    $("etaNum").textContent = fmtDur(toArrival);
-    $("etaLabel").textContent = "until wheels-down in Oslo";
+  // Card 2: arrival countdown
+  const toArr = tl.arrival - now;
+  if (toArr > 0) { $("cd2Num").textContent = fmtBig(toArr); $("cd2Label").textContent = "estimated touchdown in Vilnius"; }
+  else { $("cd2Num").textContent = "ARRIVED"; $("cd2Label").textContent = "welcome to Lithuania 🇱🇹"; }
+
+  // Jealousy
+  const j = jealousy(now);
+  $("jealNum").textContent = j + "%";
+  $("jealNum").className = "stat-num " + (j >= 100 ? "bad" : j > 80 ? "warn" : "accent");
+  $("jealLabel").textContent = j >= 100 ? "MAXED OUT — he's actually gone" : "among those left at the office";
+
+  // Plane
+  if (!liveActive) setPlaneProgress((now - tl.departure) / tl.flightDur);
+
+  // Return to reality
+  if (cfg.ret) {
+    const back = new Date(cfg.ret + "T09:00:00").getTime();
+    const toBack = back - now;
+    $("retNum").textContent = toBack > 0 ? fmtBig(toBack) : "TODAY 😱";
+    $("retNum").className = "stat-num " + (toBack > 0 ? "warn" : "bad");
+    $("retLabel").textContent = toBack > 0 ? "until he faces his inbox again" : "the inbox reunion is upon him";
   } else {
-    $("etaNum").textContent = "ARRIVED";
-    $("etaLabel").textContent = "welcome to Norway 🇳🇴";
+    $("retNum").textContent = "∞";
+    $("retNum").className = "stat-num good";
+    $("retLabel").textContent = "return date unset — and honestly, good for him";
   }
 
-  // Patience (depletes with delay, floor 3%)
-  const pct = Math.max(3, 100 - Math.floor(delayMs / 60000) * 0.7);
-  $("patienceNum").textContent = Math.round(pct) + "%";
-  $("patienceNum").className = "stat-num " + (pct > 60 ? "good" : pct > 30 ? "warn" : "bad");
-
-  // Plane progress along route
-  let p = (now - tl.departed) / tl.flightDur;
-  setPlaneProgress(p);
-
-  updateHero();
+  updateHero(now);
 }
 
-/* ───────────────────────────── SETUP DIALOG ───────────────────────────── */
+/* ───────────────────────────── SETUP ───────────────────────────── */
 function openSetup() {
-  $("inName").value = cfg.name || "";
-  $("inFlight").value = cfg.flight || "";
-  $("inDep").value = cfg.dep || "";
-  $("inArr").value = cfg.arr || "";
-  $("inKey").value = cfg.key || "";
+  $("inName").value = cfg.name || ""; $("inFlight").value = cfg.flight || "";
+  // datetime-local wants "YYYY-MM-DDTHH:mm" — strip any offset for the picker
+  $("inDep").value = (cfg.dep || "").slice(0, 16); $("inArr").value = (cfg.arr || "").slice(0, 16);
+  $("inRet").value = cfg.ret || ""; $("inKey").value = cfg.key || "";
   $("setupDlg").showModal();
 }
 $("setupBtn").onclick = openSetup;
 $("cancelBtn").onclick = () => $("setupDlg").close();
 $("saveBtn").onclick = () => {
-  cfg = {
-    name: $("inName").value.trim() || "Joel",
-    flight: $("inFlight").value.trim(),
-    dep: $("inDep").value,
-    arr: $("inArr").value,
-    key: $("inKey").value.trim()
-  };
-  saveCfg(cfg);
-  location.reload();
+  cfg = { name: $("inName").value.trim() || "Joël", flight: $("inFlight").value.trim(),
+    dep: $("inDep").value, arr: $("inArr").value, ret: $("inRet").value, key: $("inKey").value.trim() };
+  saveCfg(cfg); location.reload();
 };
 
 /* ───────────────────────────── BOOT ───────────────────────────── */
 function applyLabels() {
-  document.title = `${cfg.name} → Oslo · Flight Ops`;
-  $("title").textContent = `${cfg.name.toUpperCase()} — FLIGHT OPERATIONS CENTER`;
+  document.title = `${cfg.name}'s Great Escape → Vilnius`;
+  $("title").textContent = `${cfg.name.toUpperCase()}'S GREAT ESCAPE — VACATION OPS`;
   $("fromCode").textContent = AIRPORTS.from.code; $("fromCity").textContent = AIRPORTS.from.city;
   $("toCode").textContent = AIRPORTS.to.code; $("toCity").textContent = AIRPORTS.to.city;
 }
-
 async function boot() {
-  applyLabels();
-  initMap();
-  buildBingo();
-  rotateFact();
-  loadWeather();
-  if (!cfg.key) $("dataSource").textContent = "Running comedy simulation · add a flight number + API key in ⚙ Setup for live data.";
+  applyLabels(); initMap(); buildBingo(); renderOOO(); rotateFact(); loadWeather();
+  $("dataSource").textContent = cfg.key
+    ? "Attempting live connection…"
+    : "Running on baked schedule · add your API key in ⚙ Setup for live position updates.";
   await loadRealFlight();
-  tl = buildTimeline();
-  if (realData) { /* tl already adjusted inside loadRealFlight */ }
-
-  addFeed("🚀", `${cfg.name} Flight Operations Center is now online. Tracking commenced.`);
+  addFeed("🚀", `${cfg.name}'s Great Escape Operations Center is online. Tracking flight ${cfg.flight || "?"} to Vilnius.`);
   pushSarcasm();
-
   tick();
   setInterval(tick, 1000);
-  setInterval(pushSarcasm, 22000);   // new sarcastic update every ~22s
-  setInterval(rotateFact, 15000);    // new Norway fact every 15s
-  setInterval(loadWeather, 600000);  // refresh weather every 10 min
+  setInterval(pushSarcasm, 20000);
+  setInterval(rotateFact, 15000);
+  setInterval(loadWeather, 600000);
+  if (cfg.key) setInterval(loadRealFlight, 60000);  // live updates every minute
 }
 boot();
 </script>
