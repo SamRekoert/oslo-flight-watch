@@ -287,6 +287,7 @@ function buildTimeline() {
 let tl = buildTimeline();
 let liveActive = false;
 let celebrated = false;
+let departedAnnounced = false, landedAnnounced = false;
 
 /* ───────────────────────────── HELPERS ───────────────────────────── */
 const $ = id => document.getElementById(id);
@@ -297,6 +298,7 @@ function fmtBig(ms) {
         m = Math.floor(ms % 3600000 / 60000), s = Math.floor(ms % 60000 / 1000);
   return (neg ? "−" : "") + (d > 0 ? `${d}d ${p2(h)}:${p2(m)}:${p2(s)}` : `${p2(h)}:${p2(m)}:${p2(s)}`);
 }
+const hoursSince = ms => (Date.now() - ms) / 3600000;
 
 /* ───────────────────────────── MAP ───────────────────────────── */
 let map, planeMarker, progressLine;
@@ -360,7 +362,7 @@ async function loadRealFlight() {
   } catch (e) { $("dataSource").textContent = "Live fetch failed — running on baked schedule. (Check the key in ⚙ Setup.)"; }
 }
 
-/* ───────────────────────────── FEED HELPERS ───────────────────────────── */
+/* ───────────────────────────── FEED HELPER ───────────────────────────── */
 function feedLine(feedEl, sev, text) {
   const li = document.createElement("li");
   const t = new Date();
@@ -370,53 +372,141 @@ function feedLine(feedEl, sev, text) {
   while (feedEl.children.length > 25) feedEl.removeChild(feedEl.lastChild);
 }
 
-/* ───────────────────────────── ESCAPE STATUS FEED ───────────────────────────── */
-const SARCASM = [
-  ["🏝️","Out Of Office auto-reply armed. Coverage reassigned to: a houseplant and good intentions."],
-  ["🧳","Subject is packing shorts for a country whose forecast politely says 'maybe'."],
-  ["📉","Office morale is being quietly redistributed among those left behind."],
-  ["📧","Subject's inbox is filling up. Subject does not care. This is personal growth."],
-  ["🏀","Broadcast to Subject: in Lithuania, basketball isn't a sport, it's a personality trait."],
-  ["🥟","Subject is mentally preparing to eat his own body weight in cepelinai."],
-  ["🍲","Warning: Subject may encounter šaltibarščiai — a soup so pink it files its own taxes."],
-  ["😎","Subject's status is now 'unreachable' and, frankly, thriving."],
-  ["🛫","Subject keeps checking the gate screen like it personally owes him money."],
-  ["🧴","Sunscreen: acquired. Ambition: left at the office."],
-  ["🗺️","Subject has googled 'things to do in Vilnius' for the 6th time. Old Town still winning."],
-  ["📵","Do Not Disturb enabled. On the phone AND the conscience."],
-  ["🍺","A Švyturys has been detected in Subject's immediate future."],
-  ["🐝","Local mosquitoes have been formally notified of a fresh arrival."],
-  ["💶","Subject discovered Lithuania uses the euro. One (1) fewer excuse to overspend."],
-  ["📴","Subject's on-call phone has been placed in airplane mode. So has Subject."],
-  ["🔋","Somewhere a battery is misbehaving. It is officially Not Subject's Problem™ for the week."],
-  ["🚫","Escalation attempt blocked: Subject is 1,400 km away and pretending not to see it."],
-  ["📊","A dashboard turned red back home. Subject's dashboard is a drinks menu."],
-  ["🧘","Subject has achieved the rare 'storingsopvolger at rest' state. Scientists are baffled."],
-  ["📟","PagerDuty tried. PagerDuty failed. Subject wins."],
-  ["⚡","Grid frequency wobbled. Subject did not. He's on a terrace."],
-  ["🏖️","Subject located the nearest terrace within 4 minutes of landing. Efficiency intact."],
-  ["💍","Amber vendor spotted. Subject's wallet has entered a defensive stance."],
-  ["🗣️","Subject attempted 'Ačiū'. Locals appreciated the effort. Mostly."],
-  ["🏀","A basketball game is on. Subject now has 11 new best friends."],
-  ["😴","Cepelinai consumed. Subject requires a 2-hour horizontal recovery period."],
-  ["💗","The pink soup was, against all odds, delicious. Subject is a changed man."],
-  ["⏱️","Subject said he'd 'just check email quickly'. It has been 3 hours. He has not."],
-  ["🧢","Sunburn probability: rising. SPF located: no."],
-  ["🥂","Subject is doing the thing where he says 'this is the life' to no one in particular."],
-  ["📅","Meetings Subject is missing right now: several. Meetings he regrets missing: zero."],
-  ["🧲","Subject bought a fridge magnet. The vacation is now legally official."],
-  ["🦶","Old Town cobblestones claimed one (1) ankle. Subject walks it off heroically."],
-  ["👟","Subject's step count today already exceeds his entire last sprint."],
-  ["🪑","Back at the office, Subject's chair is being guarded by a single loyal cardigan."],
-  ["🌬️","Someone asked where Subject is. The room went quiet. A tumbleweed of jealousy rolled past."],
-  ["🍫","Duty-free Toblerone the size of a toddler: considered. Again."],
-  ["🛂","Passport control took one look at Subject's holiday grin and waved him through."],
-  ["🍽️","Subject is 'just trying a little of everything'. This is a lie of beautiful proportions."]
-];
-let sIdx = 0;
-function pushSarcasm() { const [s, t] = SARCASM[sIdx % SARCASM.length]; sIdx++; feedLine($("feed"), s, t); }
+/* ══════════════════════════════════════════════════════════════════════════
+   ESCAPE FEED — Joël's journey. Phase-aware so the story always matches reality:
+   he can't be "1,400 km away" until he's actually airborne.
+   ══════════════════════════════════════════════════════════════════════════ */
+const ESCAPE = {
+  // >3h before departure — at the office / packing
+  preFar: [
+    ["💺","Subject is at his desk, physically. Mentally he is already in seat 14C."],
+    ["🖨️","Subject has printed his boarding pass. Twice. 'To be sure.'"],
+    ["📝","Out-of-office auto-reply drafted. Subject read it aloud and smiled."],
+    ["🧳","Subject is packing shorts for a country whose forecast politely says 'maybe'."],
+    ["🗺️","Subject googled 'things to do in Vilnius' for the 6th time. Old Town still winning."],
+    ["🧴","Sunscreen: acquired. Ambition: quietly left in a desk drawer."],
+    ["⏰","Subject keeps glancing at the clock like it personally owes him money."],
+    ["🧠","Subject has mentally resigned for the week. It is a beautiful thing to witness."],
+    ["⚖️","The suitcase has been weighed three times. It has not changed weight."]
+  ],
+  // last 3h before departure — airport
+  preNear: [
+    ["🛫","Subject has entered Airport Mode: emotionally checked out, legally still employed."],
+    ["🛂","Subject cleared security with the confidence of a man who checked in online."],
+    ["🍫","Duty-free Toblerone the size of a toddler: considered. Again."],
+    ["🪑","Subject is at the gate, watching the boarding sign like it's a World Cup final."],
+    ["📣","Gate announced. Subject is first in a queue that has not started yet."],
+    ["📵","Phone switched to airplane mode. So was Subject's conscience."],
+    ["🎫","Final call. Subject strides aboard, free of Teams notifications for a whole week."]
+  ],
+  // airborne — dep → arr
+  air: [
+    ["🛫","Subject is AIRBORNE. Escape officially successful."],
+    ["🍹","The drinks cart has reached Subject. Choices were made. Joyful, questionable choices."],
+    ["🪟","Subject is staring out the window, pretending he can see the storingen from up here."],
+    ["😌","Cruising altitude reached. Subject's blood pressure at an all-time low."],
+    ["🔋","Somewhere below, a battery misbehaves. Subject cannot hear it. Subject is at peace."],
+    ["📶","Subject declined the in-flight WiFi. On purpose. Like a legend."],
+    ["🧭","1,400 km and climbing between Subject and his inbox."]
+  ],
+  // landed — after arr (the long stretch: the actual holiday)
+  landed: [
+    ["🛬","Subject has landed in Vilnius. The Old Town awaits. 🇱🇹"],
+    ["🍺","Subject located the nearest terrace within 4 minutes of landing. Efficiency intact."],
+    ["🥟","Cepelinai consumed. Subject now requires a 2-hour horizontal recovery period."],
+    ["💗","The neon-pink šaltibarščiai was, against all odds, delicious. Subject is a changed man."],
+    ["🍻","A Švyturys has been detected in Subject's hand. And another. And—"],
+    ["💍","Amber vendor spotted. Subject's wallet has entered a defensive stance."],
+    ["🗣️","Subject attempted 'Ačiū'. Locals appreciated the effort. Mostly."],
+    ["🏀","A basketball game is on every screen. Subject now has 11 new best friends."],
+    ["🦶","Old Town cobblestones claimed one (1) ankle. Subject walks it off heroically."],
+    ["👟","Subject's step count today already exceeds his entire last sprint."],
+    ["📧","Subject said he'd 'just check email quickly'. It has been 3 hours. He has not."],
+    ["🧲","Subject bought a fridge magnet. The vacation is now legally official."],
+    ["🐝","A mosquito has filed Subject under 'lunch'. Negotiations ongoing."],
+    ["🏰","Subject climbed Gediminas' Tower and declared the view 'worth the ankle'."],
+    ["🥂","Subject is doing the thing where he says 'this is the life' to no one in particular."],
+    ["🕊️","Subject visited Užupis, was handed a constitution, and agreed with all of it."],
+    ["😎","Subject has stopped checking the time. A personal record."],
+    ["🌅","Another slow morning in Vilnius. Subject's biggest decision: coffee or a second coffee."]
+  ]
+};
+function escapePhase(now) {
+  if (now < tl.departure - 3 * 3600000) return "preFar";
+  if (now < tl.departure) return "preNear";
+  if (now < tl.arrival) return "air";
+  return "landed";
+}
+let escCounters = { preFar: 0, preNear: 0, air: 0, landed: 0 };
+function pushSarcasm() {
+  const ph = escapePhase(Date.now());
+  const list = ESCAPE[ph];
+  const idx = escCounters[ph]++ % list.length;
+  feedLine($("feed"), list[idx][0], list[idx][1]);
+}
 
-/* ───────────────────────────── OFFICE CATASTROPHE ───────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════
+   OFFICE FEED — the catastrophe back home. Tiered by how long Joël's been gone,
+   so it's a slow-building collapse that tracks real elapsed time.
+   ══════════════════════════════════════════════════════════════════════════ */
+const OFFICE = {
+  pre: [ // before departure — foreboding
+    "The office senses a disturbance. Joël has printed a boarding pass.",
+    "Colleagues eye Joël's desk nervously. Who will follow the storingen now?",
+    "Contingency meeting held re: Joël's absence. Outcome: collective denial.",
+    "Someone volunteered to cover on-call, then remembered a prior commitment. Immediately.",
+    "The storingen are suspiciously quiet. They know. They are waiting.",
+    "HR confirms Joël is allowed to take holiday. The team has filed a formal objection.",
+    "A spreadsheet titled 'What Would Joël Do' has been started. It has one row. It is blank."
+  ],
+  t1: [ // 0–6h after departure — mild
+    "Storingen today: slightly up. Probably a coincidence. Probably.",
+    "The on-call phone rang. Nobody with Joël's competence answered.",
+    "First storing 'resolved' by turning it off and on again. Morale: cautiously okay.",
+    "A colleague muttered 'Joël would've caught that.' The room nodded solemnly.",
+    "One dashboard tile went amber. We are choosing to read it as 'golden'.",
+    "The team is coping. The team is fine. The team has made a second pot of coffee."
+  ],
+  t2: [ // 6–12h — doubling
+    "The amount of storingen has DOUBLED. Management assumes it's seasonal.",
+    "The amount of storingen has TRIPLED in Joël's absence.",
+    "A battery somewhere is freelancing. It has not filed the paperwork.",
+    "Escalation matrix consulted. The matrix simply reads 'call Joël'. We cannot.",
+    "Two dashboards are now amber. We have looked away from both.",
+    "Someone asked 'is this normal?' Nobody answered. That was the answer."
+  ],
+  t3: [ // 12–18h — exponential
+    "Storingen are now rising exponentially. A whiteboard was deployed. It did not help.",
+    "The imbalance market is now imbalanced about the imbalance. Meta-storing detected.",
+    "Grid frequency is doing interpretive dance. Nobody is qualified to make it stop.",
+    "Storingen have reached triple digits. Coffee reserves reached zero. Correlation suspected.",
+    "We tried ChatGPT. ChatGPT told us to contact a qualified storingsopvolger. Ha.",
+    "The dashboard is mostly red now. We've started calling red 'the new green'."
+  ],
+  t4: [ // 18–24h — critical
+    "An intern has been promoted to Head of Storingen. He started 40 minutes ago.",
+    "Storingen are now reproducing. We did not know they could do that.",
+    "The dashboard is entirely red. Someone suggested we 'just make it green'. They were removed.",
+    "A war room has been established. It contains one laptop and a great deal of sighing.",
+    "The battery portfolio has begun steering itself. It is doing better than us. Humbling.",
+    "Someone drew Joël's face on the whiteboard for morale. It isn't helping. It's judging us.",
+    "We have officially entered the 'nervous laughter' phase of incident response."
+  ],
+  t5: [ // 24h+ — apocalyptic (runs for the rest of the trip)
+    "Storingen have reached an UNPRECEDENTED number. The country is quietly falling apart in Joël's absence.",
+    "The lights flickered nationwide, spelling 'W-H-E-R-E-I-S-J-O-E-L' in Morse.",
+    "Historians have begun referring to this period as 'The Great Storing'.",
+    "The power grid has requested asylum. The request is being processed by no one.",
+    "Storingen have achieved sentience and unionised. Their one demand: Joël's return.",
+    "Scientists confirm societal collapse is now directly proportional to Joël's tan.",
+    "The last functioning transformer left a note. It simply said 'good luck'.",
+    "Storingen count: ∞. We have stopped counting. We have started praying.",
+    "Neighbouring countries have offered thoughts, prayers, and one (1) spare fuse.",
+    "A candlelit vigil is being held by the on-call phone. It has not rung. It dares not.",
+    "Emergency services now redirect all calls to Joël's voicemail. His voicemail is full.",
+    "Joël remains blissfully unaware, sipping something cold. As he should. We'll manage. (We won't.)"
+  ]
+};
 const OFFICE_STAGES = [
   ["🟢","STABLE — Joël still within reach"],
   ["🟡","ELEVATED — someone noticed he's gone"],
@@ -427,12 +517,29 @@ const OFFICE_STAGES = [
 ];
 function officeLevel(now) {
   if (now < tl.departure) return 0;
-  return Math.min(5, 1 + Math.floor((now - tl.departure) / 3600000 / 6));
+  return Math.min(5, 1 + Math.floor(hoursSince(tl.departure) / 6));
 }
 function storingenCount(now) {
   if (now < tl.departure) return 3;
-  return Math.floor(3 * Math.exp(0.12 * (now - tl.departure) / 3600000));
+  return Math.floor(3 * Math.exp(0.12 * hoursSince(tl.departure)));
 }
+function updateOffice(now) {
+  const lvl = officeLevel(now); const stage = OFFICE_STAGES[lvl];
+  $("officeStatus").textContent = `${stage[0]} ${stage[1]}`.replace(/Joël/g, cfg.name);
+  $("officeStatus").className = "stat-num " + (lvl >= 4 ? "bad" : lvl >= 3 ? "warn" : lvl >= 1 ? "accent" : "good");
+  const n = storingenCount(now);
+  $("officeStoringen").textContent = "storingen today: " + (n > 99999 ? "∞ (we stopped counting)" : n.toLocaleString());
+}
+let ofeedCounter = 0, lastTier = -1;
+function pushOfeed() {
+  const lvl = officeLevel(Date.now());
+  if (lvl !== lastTier) { lastTier = lvl; ofeedCounter = 0; }   // each tier starts its own thread
+  const bucket = lvl === 0 ? OFFICE.pre : OFFICE["t" + lvl];
+  const sev = lvl === 0 ? "🏢" : lvl >= 5 ? "☢️" : lvl >= 4 ? "🚨" : lvl >= 3 ? "🔴" : lvl >= 2 ? "🟠" : "🟡";
+  feedLine($("ofeed"), sev, bucket[ofeedCounter++ % bucket.length]);
+}
+
+/* Acting storingsopvolger (rotates in the Office Status card) */
 const HANDOVER = [
   "a Magic 8-Ball set to 'try again later'", "an out-of-office reply and a prayer",
   "ChatGPT (also on a break)", "Kevin, intern, day 2", "the on-call phone, face-down in a drawer",
@@ -442,57 +549,7 @@ const HANDOVER = [
   "'the system', which has never failed us (except now)"
 ];
 let hIdx = 0;
-function rotateHandover() { $("officeActing").textContent = "Acting storingsopvolger: " + HANDOVER[hIdx % HANDOVER.length].replace(/Joël/g, cfg.name); hIdx++; }
-function updateOffice(now) {
-  const lvl = officeLevel(now); const stage = OFFICE_STAGES[lvl];
-  $("officeStatus").textContent = `${stage[0]} ${stage[1]}`.replace(/Joël/g, cfg.name);
-  $("officeStatus").className = "stat-num " + (lvl >= 4 ? "bad" : lvl >= 3 ? "warn" : lvl >= 1 ? "accent" : "good");
-  const n = storingenCount(now);
-  $("officeStoringen").textContent = "storingen today: " + (n > 99999 ? "∞ (we stopped counting)" : n.toLocaleString());
-}
-const OFFICE_PRE = [
-  "The office senses a disturbance. Joël has printed a boarding pass.",
-  "Colleagues eye Joël's desk nervously. Who will follow the storingen now?",
-  "Contingency meeting held re: Joël's absence. Outcome: collective denial.",
-  "Someone volunteered to cover on-call, then remembered a prior commitment. Immediately.",
-  "The storingen are suspiciously quiet. They know. They are waiting.",
-  "HR confirms Joël is, in fact, allowed to take holiday. The team is appealing the decision."
-];
-const OFFICE_ESCALATION = [
-  "Storingen today: slightly up. Probably a coincidence. Probably.",
-  "The on-call phone rang. Nobody with Joël's competence answered.",
-  "First storing 'resolved' by turning it off and on again. Morale: cautiously okay.",
-  "A colleague muttered 'Joël would've caught that.' The room nodded solemnly.",
-  "The amount of storingen has DOUBLED. Management assumes it's seasonal.",
-  "The amount of storingen has TRIPLED in Joël's absence.",
-  "Storingen are now rising exponentially. A whiteboard was deployed. It did not help.",
-  "Escalation matrix consulted. The matrix simply reads 'call Joël'. We cannot.",
-  "A battery somewhere is freelancing. It has not filed the paperwork.",
-  "The imbalance market is now imbalanced about the imbalance. Meta-storing detected.",
-  "Grid frequency is doing interpretive dance. Nobody is qualified to make it stop.",
-  "Storingen have reached triple digits. Coffee reserves reached zero. Correlation suspected.",
-  "An intern has been promoted to Head of Storingen. He started 40 minutes ago.",
-  "The dashboard is entirely red. Someone suggested we 'just make it green'. They were removed.",
-  "We tried ChatGPT. ChatGPT told us to contact a qualified storingsopvolger. Ha.",
-  "Storingen are now reproducing. We did not know they could do that.",
-  "Storingen have reached an UNPRECEDENTED number. The country is quietly falling apart in Joël's absence.",
-  "The lights flickered nationwide, spelling 'W-H-E-R-E-I-S-J-O-E-L' in Morse.",
-  "Historians have begun referring to this period as 'The Great Storing'.",
-  "The power grid has requested asylum. The request is being processed by no one.",
-  "Storingen have achieved sentience and unionised. Their one demand: Joël's return.",
-  "Scientists confirm societal collapse is now directly proportional to Joël's tan.",
-  "The last functioning transformer left a note. It simply said 'good luck'.",
-  "Storingen count: ∞. We have stopped counting. We have started praying.",
-  "Neighbouring countries have offered thoughts, prayers, and one (1) spare fuse.",
-  "Joël remains blissfully unaware, sipping something cold. As he should. We'll manage. (We won't.)"
-];
-let preIdx = 0, escIdx = 0;
-function pushOfeed() {
-  const now = Date.now();
-  if (now < tl.departure) { feedLine($("ofeed"), "🏢", OFFICE_PRE[preIdx % OFFICE_PRE.length]); preIdx++; return; }
-  const i = escIdx < OFFICE_ESCALATION.length ? escIdx : (OFFICE_ESCALATION.length - 4 + (escIdx % 4));
-  feedLine($("ofeed"), "📟", OFFICE_ESCALATION[i]); escIdx++;
-}
+function rotateHandover() { $("officeActing").textContent = "Acting storingsopvolger: " + HANDOVER[hIdx++ % HANDOVER.length].replace(/Joël/g, cfg.name); }
 
 /* ───────────────────────────── LITHUANIA FACTS ───────────────────────────── */
 const FACTS = [
@@ -524,7 +581,7 @@ const FACTS = [
 let fIdx = 0;
 function rotateFact() {
   $("fact").style.opacity = 0;
-  setTimeout(() => { $("fact").textContent = FACTS[fIdx % FACTS.length].replace(/Joël/g, cfg.name); fIdx++;
+  setTimeout(() => { $("fact").textContent = FACTS[fIdx++ % FACTS.length].replace(/Joël/g, cfg.name);
     $("fact").style.transition = "opacity .4s"; $("fact").style.opacity = 1; }, 250);
 }
 
@@ -625,6 +682,17 @@ function tick() {
   $("clkVno").textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/Vilnius', hour: '2-digit', minute: '2-digit' });
   $("clkAms").textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/Amsterdam', hour: '2-digit', minute: '2-digit' });
 
+  // Live transition announcements (only when crossed while watching, not on stale loads)
+  if (now >= tl.departure && !departedAnnounced) {
+    departedAnnounced = true;
+    feedLine($("feed"), "🛫", "WHEELS UP — Subject has escaped Dutch airspace. The office exhales, then quietly panics.");
+    feedLine($("ofeed"), "🟡", "Confirmed: Subject has left the building. And the country. The storingen sense weakness.");
+  }
+  if (now >= tl.arrival && !landedAnnounced) {
+    landedAnnounced = true;
+    feedLine($("feed"), "🛬", "TOUCHDOWN in Vilnius. Subject is now, officially, a tourist. 🇱🇹");
+    feedLine($("ofeed"), "🔴", "Subject is now unreachable in another country. May the grid have mercy on us all.");
+  }
   if (now >= tl.arrival && !celebrated) { celebrated = true; celebrate(); }
 
   updateHero(now);
@@ -655,15 +723,24 @@ function applyLabels() {
 async function boot() {
   applyLabels(); initMap(); buildBingo(); renderOOO(); rotateFact(); rotateHandover(); loadWeather();
   $("dataSource").textContent = cfg.key ? "Attempting live connection…" : "Running on baked schedule · add your API key in ⚙ Setup for live position updates.";
+  // don't replay past transitions on a fresh load — only announce ones that happen live
+  departedAnnounced = Date.now() >= tl.departure;
+  landedAnnounced = Date.now() >= tl.arrival;
   await loadRealFlight();
+  departedAnnounced = Date.now() >= tl.departure;
+  landedAnnounced = Date.now() >= tl.arrival;
+
   feedLine($("feed"), "🚀", `${cfg.name}'s Great Escape Operations Center is online. Tracking flight ${cfg.flight || "?"} to Vilnius.`);
-  pushSarcasm(); pushOfeed();
+  // seed each feed with a few phase-appropriate entries so they're not empty
+  pushSarcasm(); pushSarcasm(); pushSarcasm();
+  pushOfeed(); pushOfeed();
+
   tick();
   setInterval(tick, 1000);
-  setInterval(pushSarcasm, 18000);
-  setInterval(pushOfeed, 13000);
-  setInterval(rotateFact, 15000);
-  setInterval(rotateHandover, 9000);
+  setInterval(pushSarcasm, 42000);                                   // escape feed: calmer
+  setTimeout(() => setInterval(pushOfeed, 44000), 21000);            // office feed: offset so they don't post together
+  setInterval(rotateFact, 24000);                                    // facts: slower rotation
+  setInterval(rotateHandover, 18000);
   setInterval(loadWeather, 600000);
   if (cfg.key) setInterval(loadRealFlight, 60000);
 }
